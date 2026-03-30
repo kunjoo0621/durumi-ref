@@ -310,7 +310,35 @@ function DockItem({ cat, isActive, onClick, scale = 1, hideActiveTooltip = false
   );
 }
 
-/* ─── Dock Bar (macOS magnification effect) ─── */
+/* ─── Mobile Tab Item (iOS style) ─── */
+function MobileTabItem({ cat, isActive, onClick }: { cat: Category; isActive: boolean; onClick: (id: string) => void }) {
+  const Icon = CATEGORY_ICONS[cat.id];
+  return (
+    <button
+      onClick={() => onClick(cat.id)}
+      aria-label={cat.label}
+      className="flex flex-1 flex-col items-center justify-center gap-0.5 border-none"
+      style={{
+        background: "transparent",
+        cursor: "pointer",
+        fontFamily: "inherit",
+        padding: "6px 0",
+        minHeight: 44,
+        color: isActive ? cat.color : "var(--color-gray-1)",
+        transition: "color 0.2s",
+      }}
+    >
+      {Icon && <Icon size={20} weight="fill" />}
+      <span style={{
+        fontSize: 9,
+        fontWeight: isActive ? 600 : 400,
+        letterSpacing: 0.1,
+      }}>{cat.label}</span>
+    </button>
+  );
+}
+
+/* ─── Dock Bar (desktop: macOS magnification / mobile: iOS tab bar) ─── */
 function DockBar({ categories: cats, activeTab, onTabChange }: { categories: Category[]; activeTab: string; onTabChange: (id: string) => void }) {
   const [hoveredIdx, setHoveredIdx] = useState<number | null>(null);
 
@@ -324,26 +352,39 @@ function DockBar({ categories: cats, activeTab, onTabChange }: { categories: Cat
   };
 
   return (
-    <div className="safe-bottom pointer-events-none absolute inset-x-0 bottom-0 z-10 flex justify-center pb-3 sm:pb-5">
-      <div
-        className="pointer-events-auto flex items-end gap-1 overflow-visible px-2 py-2 sm:gap-1.5 sm:px-2.5"
-        style={{
-          background: "var(--glass-bg-strong)",
-          backdropFilter: "var(--glass-blur)",
-          WebkitBackdropFilter: "var(--glass-blur)",
-          borderRadius: 18,
-          border: "1px solid var(--glass-border)",
-          boxShadow: `0 8px 40px rgba(0,0,0,0.5), var(--glass-inset)`,
-        }}
-        onMouseLeave={() => setHoveredIdx(null)}
-      >
-        {cats.map((cat, i) => (
-          <div key={cat.id} onMouseEnter={() => setHoveredIdx(i)}>
-            <DockItem cat={cat} isActive={activeTab === cat.id} onClick={onTabChange} scale={getScale(i)} hideActiveTooltip={hoveredIdx !== null && !(activeTab === cat.id && hoveredIdx === i)} />
-          </div>
-        ))}
+    <>
+      {/* Mobile: iOS tab bar */}
+      <div className="safe-bottom absolute inset-x-0 bottom-0 z-10 sm:hidden"
+        style={{ borderTop: "1px solid var(--glass-border)", background: "var(--glass-bg-strong)", backdropFilter: "var(--glass-blur)", WebkitBackdropFilter: "var(--glass-blur)" }}>
+        <div className="flex items-center">
+          {cats.map((cat) => (
+            <MobileTabItem key={cat.id} cat={cat} isActive={activeTab === cat.id} onClick={onTabChange} />
+          ))}
+        </div>
       </div>
-    </div>
+
+      {/* Desktop: glassmorphism dock */}
+      <div className="safe-bottom pointer-events-none absolute inset-x-0 bottom-0 z-10 hidden justify-center pb-5 sm:flex">
+        <div
+          className="pointer-events-auto flex items-end gap-1.5 overflow-visible px-2.5 py-2"
+          style={{
+            background: "var(--glass-bg-strong)",
+            backdropFilter: "var(--glass-blur)",
+            WebkitBackdropFilter: "var(--glass-blur)",
+            borderRadius: 18,
+            border: "1px solid var(--glass-border)",
+            boxShadow: `0 8px 40px rgba(0,0,0,0.5), var(--glass-inset)`,
+          }}
+          onMouseLeave={() => setHoveredIdx(null)}
+        >
+          {cats.map((cat, i) => (
+            <div key={cat.id} onMouseEnter={() => setHoveredIdx(i)}>
+              <DockItem cat={cat} isActive={activeTab === cat.id} onClick={onTabChange} scale={getScale(i)} hideActiveTooltip={hoveredIdx !== null && !(activeTab === cat.id && hoveredIdx === i)} />
+            </div>
+          ))}
+        </div>
+      </div>
+    </>
   );
 }
 

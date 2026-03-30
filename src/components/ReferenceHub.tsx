@@ -156,7 +156,7 @@ function StripCard({
           overflow: "hidden", cursor: "pointer", userSelect: "none",
           transform: isHovered ? "scale(1.08)" : isFaded ? "scale(0.96)" : "scale(1)",
           zIndex: isHovered ? 10 : 1,
-          filter: isFaded ? "brightness(0.4) grayscale(0.8)" : "brightness(1) grayscale(0)",
+          filter: isFaded ? "brightness(0.7) grayscale(0.3)" : "brightness(1) grayscale(0)",
           boxShadow: isHovered ? `0 24px 64px rgba(0,0,0,0.6), 0 0 40px ${catColor}15` : "0 2px 12px rgba(0,0,0,0.1)",
           transition: `transform 0.45s var(--ease-smooth), filter 0.4s ease, box-shadow 0.4s ease, z-index 0s`,
           animation: "card-in 0.5s cubic-bezier(.16,1,.3,1) backwards",

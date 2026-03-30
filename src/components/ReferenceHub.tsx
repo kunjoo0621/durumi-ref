@@ -48,12 +48,15 @@ function Favicon({ domain, size = 14, className = "" }: { domain: string; size?:
 }
 
 /* ─── OG Thumbnail ─── */
-const OGThumb = memo(function OGThumb({ site, isHovered = false }: { site: Site; isHovered?: boolean }) {
+const OGThumb = memo(function OGThumb({ site, isHovered = false, variant = "mobile" }: { site: Site; isHovered?: boolean; variant?: "mobile" | "desktop" }) {
   const [status, setStatus] = useState<"loading" | "loaded" | "error">("loading");
   const [srcIdx, setSrcIdx] = useState(0);
   const [imgHeight, setImgHeight] = useState(0);
   const containerRef = useRef<HTMLDivElement>(null);
-  const localPath = `/thumbnails/${site.url.replace(/[/:]/g, "_")}.jpg`;
+  const slug = site.url.replace(/[/:]/g, "_");
+  const localPath = variant === "desktop"
+    ? `/thumbnails/${slug}_desktop.jpg`
+    : `/thumbnails/${slug}.jpg`;
   const sources = [
     localPath,
     `https://s.wordpress.com/mshots/v1/${encodeURIComponent("https://" + site.url)}?w=640&h=800`,
@@ -236,7 +239,7 @@ function ListCard({ site, index }: { site: Site; index: number }) {
       }}
     >
       <div style={{ borderRadius: "var(--radius-lg)", overflow: "hidden", aspectRatio: "16/10", position: "relative", background: "var(--color-gray-5)" }}>
-        <OGThumb site={site} />
+        <OGThumb site={site} variant="desktop" />
       </div>
       <div style={{ padding: "10px 2px 4px" }}>
         <div className="mb-0.5 flex items-center gap-[7px]">
@@ -317,13 +320,13 @@ function MobileTabItem({ cat, isActive, onClick }: { cat: Category; isActive: bo
     <button
       onClick={() => onClick(cat.id)}
       aria-label={cat.label}
-      className="flex flex-1 flex-col items-center justify-center gap-0.5 border-none"
+      className="flex shrink-0 flex-col items-center justify-center gap-0.5 border-none"
       style={{
         background: "transparent",
         cursor: "pointer",
         fontFamily: "inherit",
-        padding: "6px 0",
-        minHeight: 44,
+        padding: "8px 14px",
+        minHeight: 48,
         color: isActive ? cat.color : "var(--color-gray-1)",
         transition: "color 0.2s",
       }}
@@ -356,7 +359,7 @@ function DockBar({ categories: cats, activeTab, onTabChange }: { categories: Cat
       {/* Mobile: iOS tab bar */}
       <div className="safe-bottom absolute inset-x-0 bottom-0 z-10 sm:hidden"
         style={{ borderTop: "1px solid var(--glass-border)", background: "var(--glass-bg-strong)", backdropFilter: "var(--glass-blur)", WebkitBackdropFilter: "var(--glass-blur)" }}>
-        <div className="flex items-center">
+        <div className="hide-scrollbar flex items-center overflow-x-auto">
           {cats.map((cat) => (
             <MobileTabItem key={cat.id} cat={cat} isActive={activeTab === cat.id} onClick={onTabChange} />
           ))}
@@ -493,7 +496,7 @@ export default function ReferenceHub() {
         {/* Logo */}
         <div className="flex items-center gap-2">
           <svg width={28} height={28} viewBox="0 0 400 400" fill="none" className="rounded-md sm:size-8" style={{ transition: "background 0.5s ease" }}>
-            <rect width="400" height="400" rx="40" fill={activeCat.color} style={{ transition: "fill 0.5s ease" }} />
+            <rect width="400" height="400" rx="20" fill={activeCat.color} style={{ transition: "fill 0.5s ease" }} />
             <g clipPath="url(#logo-clip)">
               <path fillRule="evenodd" clipRule="evenodd" d="M69.7266 172.27V138.668C95.1611 138.668 115.644 118.184 115.644 92.5488H149.247C149.247 136.682 113.684 172.27 69.7266 172.27Z" fill="white"/>
               <path fillRule="evenodd" clipRule="evenodd" d="M250.023 92.5488H283.626C283.626 118.184 304.285 138.668 329.745 138.668V172.27C285.813 172.27 250.049 136.682 250.049 92.5488H250.023Z" fill="white"/>

@@ -1,12 +1,11 @@
-import { chromium } from "playwright";
+import { chromium, devices } from "playwright";
 import { categories } from "../src/data/categories";
 import * as fs from "fs";
 import * as path from "path";
 
 const OUTPUT_DIR = path.join(__dirname, "../public/thumbnails");
-const WIDTH = 1280;
-const HEIGHT = 800;
-const DEVICE_SCALE = 2;
+const device = devices["iPhone 14 Pro"];
+const MAX_HEIGHT = 3000; // cap fullPage height
 
 async function capture() {
   fs.mkdirSync(OUTPUT_DIR, { recursive: true });
@@ -15,9 +14,12 @@ async function capture() {
     cat.sites.map((site) => ({ ...site, catId: cat.id }))
   );
 
-  const existing = new Set(
-    fs.readdirSync(OUTPUT_DIR).map((f) => f.replace(".jpg", ""))
-  );
+  // Check --force flag to recapture all
+  const force = process.argv.includes("--force");
+
+  const existing = force
+    ? new Set<string>()
+    : new Set(fs.readdirSync(OUTPUT_DIR).filter((f) => f.endsWith(".jpg")).map((f) => f.replace(".jpg", "")));
 
   const toCapture = allSites.filter(
     (site) => !existing.has(site.url.replace(/[/:]/g, "_"))
@@ -32,8 +34,8 @@ async function capture() {
 
   const browser = await chromium.launch({ headless: true });
   const context = await browser.newContext({
-    viewport: { width: WIDTH, height: HEIGHT },
-    deviceScaleFactor: DEVICE_SCALE,
+    ...device,
+    deviceScaleFactor: 2,
     locale: "ko-KR",
   });
 
@@ -48,12 +50,13 @@ async function capture() {
       console.log(`  ⏳ ${site.name} (${url})`);
 
       await page.goto(url, {
-        waitUntil: "networkidle",
-        timeout: 20000,
+        waitUntil: "domcontentloaded",
+        timeout: 25000,
       });
 
-      await page.waitForTimeout(2000);
+      await page.waitForTimeout(3000);
 
+      // Dismiss cookie/popup overlays
       try {
         await page.evaluate(() => {
           const selectors = [
@@ -72,14 +75,42 @@ async function capture() {
         // ignore
       }
 
-      await page.screenshot({
-        path: filepath,
-        type: "jpeg",
-        quality: 80,
-        fullPage: true,
-      });
+      // Try fullPage first, fallback to clip
+      try {
+        await page.screenshot({
+          path: filepath,
+          type: "jpeg",
+          quality: 80,
+          fullPage: true,
+        });
 
-      console.log(`  ✅ ${site.name}`);
+        // If fullPage is too tall, re-capture with clip
+        const stat = fs.statSync(filepath);
+        if (stat.size > 3_000_000) {
+          await page.screenshot({
+            path: filepath,
+            type: "jpeg",
+            quality: 75,
+            clip: { x: 0, y: 0, width: device.viewport.width, height: MAX_HEIGHT },
+          });
+        }
+      } catch {
+        await page.screenshot({
+          path: filepath,
+          type: "jpeg",
+          quality: 80,
+          clip: { x: 0, y: 0, width: device.viewport.width, height: MAX_HEIGHT },
+        });
+      }
+
+      // Verify file is valid (not empty, not too small)
+      const stat = fs.statSync(filepath);
+      if (stat.size < 5000) {
+        fs.unlinkSync(filepath);
+        console.log(`  ❌ ${site.name} — captured but too small, removed`);
+      } else {
+        console.log(`  ✅ ${site.name}`);
+      }
     } catch (err) {
       console.log(`  ❌ ${site.name} — ${(err as Error).message.slice(0, 60)}`);
     } finally {

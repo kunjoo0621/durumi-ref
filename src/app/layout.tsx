@@ -18,6 +18,10 @@ const pretendard = localFont({
 export const metadata: Metadata = {
   title: "Durumi Ref",
   description: "디자이너를 위한 레퍼런스 사이트 큐레이션",
+  icons: {
+    icon: "/favicon.png",
+    apple: "/apple-touch-icon.png",
+  },
 };
 
 export const viewport: Viewport = {

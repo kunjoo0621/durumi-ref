@@ -449,9 +449,13 @@ export default function ReferenceHub() {
       {/* ─── Header (floating, flat items) ─── */}
       <header className="safe-top absolute inset-x-0 top-0 z-10 flex items-center justify-between px-5 pt-3 sm:px-8 sm:pt-5">
         {/* Logo */}
-        <span className="text-[15px] font-bold tracking-tight text-white sm:text-[17px]">
-          Durumi Ref
-        </span>
+        <div className="flex items-center gap-2">
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img src="/logo.png" alt="Durumi Ref" width={28} height={28} className="rounded-md sm:size-8" />
+          <span className="hidden text-[15px] font-bold tracking-tight text-white sm:block sm:text-[17px]">
+            Durumi Ref
+          </span>
+        </div>
 
         {/* Right controls */}
         <div className="flex items-center gap-2 sm:gap-3">

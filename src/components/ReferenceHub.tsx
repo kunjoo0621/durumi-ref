@@ -250,7 +250,7 @@ function ListCard({ site, index }: { site: Site; index: number }) {
 }
 
 /* ─── Dock Item (card style) ─── */
-function DockItem({ cat, isActive, onClick, scale = 1 }: { cat: Category; isActive: boolean; onClick: (id: string) => void; scale?: number }) {
+function DockItem({ cat, isActive, onClick, scale = 1, hideActiveTooltip = false }: { cat: Category; isActive: boolean; onClick: (id: string) => void; scale?: number; hideActiveTooltip?: boolean }) {
   const [hov, setHov] = useState(false);
   const [pressed, setPressed] = useState(false);
   const Icon = CATEGORY_ICONS[cat.id];
@@ -302,7 +302,7 @@ function DockItem({ cat, isActive, onClick, scale = 1 }: { cat: Category; isActi
         color: isActive ? "#000" : "var(--color-label)",
         fontSize: 11, fontWeight: isActive ? 600 : 500,
         padding: "4px 10px", borderRadius: 6, whiteSpace: "nowrap",
-        opacity: isActive || hov ? 1 : 0,
+        opacity: (isActive && !hideActiveTooltip) || hov ? 1 : 0,
         transform: isActive || hov ? `translateY(-${Math.round(hov && !isActive ? 12 * scale : 0)}px)` : "translateY(4px)",
         transition: "opacity 0.15s, transform 0.2s var(--ease-spring), background 0.3s", pointerEvents: "none", zIndex: 20,
       }}>{cat.label}</div>
@@ -339,7 +339,7 @@ function DockBar({ categories: cats, activeTab, onTabChange }: { categories: Cat
       >
         {cats.map((cat, i) => (
           <div key={cat.id} onMouseEnter={() => setHoveredIdx(i)}>
-            <DockItem cat={cat} isActive={activeTab === cat.id} onClick={onTabChange} scale={getScale(i)} />
+            <DockItem cat={cat} isActive={activeTab === cat.id} onClick={onTabChange} scale={getScale(i)} hideActiveTooltip={hoveredIdx !== null && !(activeTab === cat.id && hoveredIdx === i)} />
           </div>
         ))}
       </div>

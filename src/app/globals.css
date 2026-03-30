@@ -1,26 +1,157 @@
 @import "tailwindcss";
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
-}
+/* ═══════════════════════════════════════════════
+   Durumi Ref — Design Tokens
+   Apple HIG Dark Mode Color System
+   ═══════════════════════════════════════════════ */
 
 @theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+
+  /* ─── System Colors ─── */
+  --color-blue: #0A84FF;
+  --color-green: #30D158;
+  --color-indigo: #5E5CE6;
+  --color-orange: #FF9F0A;
+  --color-pink: #FF375F;
+  --color-purple: #BF5AF2;
+  --color-teal: #64D2FF;
+  --color-yellow: #FFD60A;
+  --color-mint: #63E6E2;
+
+  /* ─── Gray Scale ─── */
+  --color-gray-1: #8E8E93;
+  --color-gray-2: #636366;
+  --color-gray-3: #48484A;
+  --color-gray-4: #3A3A3C;
+  --color-gray-5: #2C2C2E;
+  --color-gray-6: #1C1C1E;
+
+  /* ─── Semantic: Background ─── */
+  --color-bg: #000000;
+
+  /* ─── Semantic: Label (Text) ─── */
+  --color-label: #FFFFFF;
+  --color-label-2: rgba(235, 235, 245, 0.60);
+  --color-label-3: rgba(235, 235, 245, 0.30);
+  --color-label-4: rgba(235, 235, 245, 0.18);
+
+  /* ─── Semantic: Fill ─── */
+  --color-fill-4: rgba(116, 116, 128, 0.18);
+
+  /* ─── Typography (Tailwind utility fonts) ─── */
+  --font-display: var(--font-montserrat), var(--font-pretendard), sans-serif;
+  --font-body: var(--font-montserrat), var(--font-pretendard), sans-serif;
+
+  /* ─── Easing ─── */
+  --ease-smooth: cubic-bezier(0.22, 0.68, 0.00, 1.0);
+  --ease-spring: cubic-bezier(0.34, 1.56, 0.64, 1);
+
+  /* ─── Shadow ─── */
+  --shadow-card: 0 2px 12px rgba(0, 0, 0, 0.1);
+  --shadow-card-hover: 0 24px 64px rgba(0, 0, 0, 0.6);
+  --shadow-dock: 0 4px 24px rgba(0, 0, 0, 0.3);
+
+  /* ─── Radius ─── */
+  --radius-xs: 5px;
+  --radius-sm: 8px;
+  --radius-md: 12px;
+  --radius-lg: 16px;
+
+  /* ─── Glassmorphism ─── */
+  --glass-bg: rgba(28, 28, 30, 0.55);
+  --glass-bg-strong: rgba(28, 28, 30, 0.75);
+  --glass-border: rgba(255, 255, 255, 0.06);
+  --glass-blur: blur(24px) saturate(180%);
+  --glass-inset: inset 0 1px 0 rgba(255, 255, 255, 0.05);
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+/* ─── Base Styles ─── */
+body {
+  background: var(--color-bg);
+  color: var(--color-label);
+  font-family: var(--font-montserrat), var(--font-pretendard), -apple-system, BlinkMacSystemFont, sans-serif;
+}
+
+/* ─── Safe Area (iPhone notch/home indicator) ─── */
+.safe-top {
+  padding-top: max(8px, env(safe-area-inset-top));
+}
+.safe-bottom {
+  padding-bottom: max(12px, env(safe-area-inset-bottom));
+}
+
+/* ─── Utility: Hide Scrollbar ─── */
+.hide-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+.hide-scrollbar {
+  scrollbar-width: none;
+}
+
+/* ─── Animations ─── */
+@keyframes card-in {
+  from {
+    opacity: 0;
+    transform: translateX(30px) scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0) scale(1);
   }
 }
 
-body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+@keyframes fade-up {
+  from {
+    opacity: 0;
+    transform: translateY(16px) scale(0.97);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+@keyframes glow-breathe {
+  0%, 100% {
+    opacity: 0.85;
+    transform: scale(1) translateY(0);
+  }
+  50% {
+    opacity: 1;
+    transform: scale(1.05) translateY(-2%);
+  }
+}
+
+/* ─── Reduced Motion ─── */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+/* ─── Focus ─── */
+:focus-visible {
+  outline: 2px solid var(--color-blue);
+  outline-offset: 2px;
+}
+
+/* ─── Touch ─── */
+a, button {
+  touch-action: manipulation;
+}
+
+/* ─── Custom Cursor (mouse devices only) ─── */
+@media (pointer: fine) {
+  * { cursor: none !important; }
+}
+
+@keyframes shimmer {
+  0% {
+    background-position: 200% 0;
+  }
+  100% {
+    background-position: -200% 0;
+  }
 }

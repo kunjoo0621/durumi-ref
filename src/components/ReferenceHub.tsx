@@ -79,11 +79,16 @@ const OGThumb = memo(function OGThumb({ site, isHovered = false, variant = "mobi
     setImgHeight(scaledHeight);
   };
 
-  const containerHeight = containerRef.current?.clientHeight || 400;
+  const [containerHeight, setContainerHeight] = useState(400);
+
+  useEffect(() => {
+    if (containerRef.current) setContainerHeight(containerRef.current.clientHeight);
+  }, []);
+
   const rawScroll = Math.max(0, imgHeight - containerHeight);
-  const scrollDistance = Math.min(rawScroll, containerHeight * 2); // max 2x container height
+  const scrollDistance = Math.min(rawScroll, containerHeight * 2);
   const canScroll = scrollDistance > 40;
-  const scrollDuration = 4; // fixed 4s for all
+  const scrollDuration = 4;
 
   return (
     <div ref={containerRef} className="absolute inset-0 overflow-hidden">
@@ -286,7 +291,7 @@ function DockItem({ cat, isActive, onClick, scale = 1, hideActiveTooltip = false
           transform: pressed
             ? "scale(0.9) translateY(0px)"
             : hov && !isActive
-              ? `scale(${scale > 1 ? 1 : 1}) translateY(-${Math.round(12 * scale)}px)`
+              ? `scale(${scale}) translateY(-${Math.round(12 * scale)}px)`
               : "scale(1) translateY(0px)",
           transition: `color 0.2s, background 0.2s, box-shadow 0.2s, transform 0.2s var(--ease-spring)`,
         }}>
@@ -412,7 +417,6 @@ export default function ReferenceHub() {
   const dragStart = useRef({ x: 0, scroll: 0 });
 
   const activeCat = categories.find((c) => c.id === activeTab)!;
-  const filteredSites = activeCat.sites;
 
   const switchTab = (id: string) => {
     if (id === activeTab) return;
@@ -593,7 +597,7 @@ export default function ReferenceHub() {
               style={{ height: "clamp(320px, 62vh, 560px)", cursor: "grab", scrollbarWidth: "none", WebkitOverflowScrolling: "touch" }}
             >
               <div className="shrink-0 basis-2 sm:basis-5" />
-              {filteredSites.map((site, i) => (
+              {activeCat.sites.map((site, i) => (
                 <StripCard
                   key={`${activeTab}-${site.name}`}
                   site={site} catColor={activeCat.color} index={i}
@@ -609,7 +613,7 @@ export default function ReferenceHub() {
         ) : (
           <div className="relative flex-1 overflow-y-auto px-4 pt-16 pb-32 sm:px-5 sm:pt-20 sm:pb-36">
             <div className="mx-auto grid max-w-[640px] grid-cols-1 gap-6 sm:grid-cols-2 sm:gap-8">
-              {filteredSites.map((site, i) => (
+              {activeCat.sites.map((site, i) => (
                 <ListCard key={`${activeTab}-${site.name}`} site={site} index={i} />
               ))}
             </div>

@@ -341,7 +341,7 @@ function MobileTabItem({ cat, isActive, onClick }: { cat: Category; isActive: bo
         fontSize: 9,
         fontWeight: isActive ? 600 : 400,
         letterSpacing: 0.1,
-      }}>{cat.label}</span>
+      }}>{cat.shortLabel}</span>
     </button>
   );
 }

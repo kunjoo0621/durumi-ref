@@ -7,6 +7,7 @@ export interface Site {
 export interface Category {
   id: string;
   label: string;
+  shortLabel: string;
   color: string;
   sites: Site[];
 }
@@ -27,6 +28,7 @@ export const categories: Category[] = [
   {
     id: "uiux",
     label: "UI/UX",
+    shortLabel: "UI/UX",
     color: COLORS.blue,
     sites: [
       { name: "Mobbin", url: "mobbin.com", desc: "해외 모바일·웹 화면 라이브러리" },
@@ -46,6 +48,7 @@ export const categories: Category[] = [
   {
     id: "system",
     label: "Design System",
+    shortLabel: "시스템",
     color: COLORS.orange,
     sites: [
       { name: "Shadcn/ui", url: "ui.shadcn.com", desc: "재사용 가능한 컴포넌트" },
@@ -58,6 +61,7 @@ export const categories: Category[] = [
   {
     id: "collateral",
     label: "Collateral",
+    shortLabel: "산출물",
     color: COLORS.yellow,
     sites: [
       { name: "Really Good Emails", url: "reallygoodemails.com", desc: "카테고리별 이메일 디자인 갤러리" },
@@ -68,6 +72,7 @@ export const categories: Category[] = [
   {
     id: "asset",
     label: "Asset",
+    shortLabel: "에셋",
     color: COLORS.teal,
     sites: [
       { name: "Unsplash", url: "unsplash.com", desc: "고퀄리티 무료 사진" },
@@ -83,6 +88,7 @@ export const categories: Category[] = [
   {
     id: "icon",
     label: "Icon",
+    shortLabel: "아이콘",
     color: COLORS.green,
     sites: [
       { name: "Lucide", url: "lucide.dev", desc: "Feather Icons 기반 커뮤니티 아이콘" },
@@ -96,6 +102,7 @@ export const categories: Category[] = [
   {
     id: "typo",
     label: "Typography",
+    shortLabel: "타이포",
     color: COLORS.pink,
     sites: [
       { name: "Google Fonts", url: "fonts.google.com", desc: "무료 웹 폰트 라이브러리" },
@@ -109,6 +116,7 @@ export const categories: Category[] = [
   {
     id: "inspiration",
     label: "Inspiration",
+    shortLabel: "영감",
     color: COLORS.purple,
     sites: [
       { name: "Dribbble", url: "dribbble.com", desc: "디자이너 포트폴리오·작업물 공유" },

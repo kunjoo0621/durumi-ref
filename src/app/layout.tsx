@@ -19,8 +19,19 @@ export const metadata: Metadata = {
   title: "Durumi Ref",
   description: "디자이너를 위한 레퍼런스 사이트 큐레이션",
   icons: {
-    icon: "/favicon.png",
+    icon: "/logo.svg",
     apple: "/apple-touch-icon.png",
+  },
+  openGraph: {
+    title: "Durumi Ref",
+    description: "디자이너를 위한 레퍼런스 사이트 큐레이션",
+    images: [{ url: "/og.png", width: 800, height: 400 }],
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Durumi Ref",
+    description: "디자이너를 위한 레퍼런스 사이트 큐레이션",
+    images: ["/og.png"],
   },
 };
 

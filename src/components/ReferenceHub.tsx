@@ -77,9 +77,10 @@ const OGThumb = memo(function OGThumb({ site, isHovered = false }: { site: Site;
   };
 
   const containerHeight = containerRef.current?.clientHeight || 400;
-  const scrollDistance = Math.max(0, imgHeight - containerHeight);
+  const rawScroll = Math.max(0, imgHeight - containerHeight);
+  const scrollDistance = Math.min(rawScroll, containerHeight * 2); // max 2x container height
   const canScroll = scrollDistance > 40;
-  const scrollDuration = Math.min(8, Math.max(2, scrollDistance / 150));
+  const scrollDuration = 4; // fixed 4s for all
 
   return (
     <div ref={containerRef} className="absolute inset-0 overflow-hidden">

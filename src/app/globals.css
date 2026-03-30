@@ -142,6 +142,31 @@ a, button {
   touch-action: manipulation;
 }
 
+/* ─── Header Button Interactions ─── */
+.header-btn {
+  transition: background 0.2s, transform 0.15s var(--ease-spring), opacity 0.2s;
+}
+.header-btn:hover {
+  background: var(--color-gray-4) !important;
+  transform: scale(1.08);
+}
+.header-btn:active {
+  transform: scale(0.92);
+  opacity: 0.8;
+}
+
+.header-btn-submit {
+  transition: background 0.2s, transform 0.15s var(--ease-spring), opacity 0.2s;
+}
+.header-btn-submit:hover {
+  opacity: 0.85;
+  transform: scale(1.05);
+}
+.header-btn-submit:active {
+  transform: scale(0.93);
+  opacity: 0.7;
+}
+
 /* ─── Custom Cursor (mouse devices only) ─── */
 @media (pointer: fine) {
   * { cursor: none; }

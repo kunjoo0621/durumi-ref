@@ -532,12 +532,11 @@ export default function ReferenceHub() {
             <button
               onClick={() => { setViewMode("card"); setHoveredCard(null); }}
               aria-label="Card view"
-              className="flex size-8 items-center justify-center"
+              className="header-btn flex size-8 items-center justify-center"
               style={{
                 borderRadius: 999,
                 border: "none", cursor: "pointer", fontFamily: "inherit",
                 background: viewMode === "card" ? "var(--color-gray-4)" : "transparent",
-                transition: "background 0.2s",
               }}
             >
               <CardViewIcon active={viewMode === "card"} color={activeCat.color} />
@@ -545,12 +544,11 @@ export default function ReferenceHub() {
             <button
               onClick={() => setViewMode("list")}
               aria-label="List view"
-              className="flex size-8 items-center justify-center"
+              className="header-btn flex size-8 items-center justify-center"
               style={{
                 borderRadius: 999,
                 border: "none", cursor: "pointer", fontFamily: "inherit",
                 background: viewMode === "list" ? "var(--color-gray-4)" : "transparent",
-                transition: "background 0.2s",
               }}
             >
               <ListViewIcon active={viewMode === "list"} color={activeCat.color} />
@@ -560,7 +558,7 @@ export default function ReferenceHub() {
           {/* Submit pill */}
           <button
             onClick={() => setSubmitOpen(true)}
-            className="shrink-0 border-none"
+            className="header-btn-submit shrink-0 border-none"
             style={{
               padding: "8px 18px",
               borderRadius: 999,

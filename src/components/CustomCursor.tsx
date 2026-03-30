@@ -136,11 +136,11 @@ export default function CustomCursor({ color, isHovering = false }: CustomCursor
       <svg style={{ position: "absolute", width: 0, height: 0 }}>
         <defs>
           <filter id="liquid">
-            <feGaussianBlur in="SourceGraphic" stdDeviation="5" result="blur" />
+            <feGaussianBlur in="SourceGraphic" stdDeviation="4" result="blur" />
             <feColorMatrix
               in="blur"
               mode="matrix"
-              values="1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 20 -8"
+              values="1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 22 -9"
               result="liquid"
             />
           </filter>

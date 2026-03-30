@@ -144,7 +144,8 @@ a, button {
 
 /* ─── Custom Cursor (mouse devices only) ─── */
 @media (pointer: fine) {
-  * { cursor: none !important; }
+  * { cursor: none; }
+  input, select, textarea { cursor: text; }
 }
 
 @keyframes shimmer {

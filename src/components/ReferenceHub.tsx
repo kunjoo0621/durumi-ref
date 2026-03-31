@@ -190,7 +190,7 @@ function StripCard({
           transition: `opacity 0.3s, transform 0.45s var(--ease-smooth)`,
         }} />
 
-        <div style={{ position: "absolute", bottom: 0, left: 0, right: 0, padding: "0 14px 14px", zIndex: 4, pointerEvents: "none" }}>
+        <div style={{ position: "absolute", bottom: 0, left: 0, right: 0, padding: "0 14px 24px", zIndex: 4, pointerEvents: "none" }}>
           <div className="mb-1 flex items-center gap-2">
             <Favicon domain={site.url} className="shrink-0 opacity-85" />
             <span className="overflow-hidden text-sm font-bold text-white sm:text-base" style={{
@@ -202,12 +202,6 @@ function StripCard({
             fontSize: 12, color: "var(--color-label-2)",
             textShadow: "0 1px 6px rgba(0,0,0,0.5)",
           }}>{site.desc}</div>
-          <div className="hidden sm:block" style={{
-            fontSize: 11, color: "var(--color-label-3)", marginTop: 5, letterSpacing: 0.3,
-            opacity: isHovered ? 0.65 : 0,
-            transform: isHovered ? "translateY(0)" : "translateY(5px)",
-            transition: `opacity 0.25s ease ${isHovered ? "0.12s" : "0s"}, transform 0.3s var(--ease-smooth) ${isHovered ? "0.1s" : "0s"}`,
-          }}>{site.url}</div>
         </div>
 
         <div style={{

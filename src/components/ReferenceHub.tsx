@@ -233,6 +233,7 @@ function StripCard({
             <span style={{ fontSize: 16, fontWeight: 700, color: "white", letterSpacing: -0.3, lineHeight: 1 }}>{site.name}</span>
           </div>
           <div style={{ fontSize: 12, color: "rgba(235,235,245,0.5)", lineHeight: 1.6 }}>{site.desc}</div>
+          <div style={{ minHeight: 40, flex: 1 }} />
         </div>
 
         {/* Tags */}
@@ -617,7 +618,7 @@ export default function ReferenceHub() {
               data-dragged="false"
               onMouseDown={onMouseDown}
               onMouseLeave={() => setHoveredCard(null)}
-              style={{ height: "clamp(360px, 55vh, 480px)", cursor: "grab", scrollbarWidth: "none", WebkitOverflowScrolling: "touch" }}
+              style={{ height: "clamp(400px, 60vh, 520px)", cursor: "grab", scrollbarWidth: "none", WebkitOverflowScrolling: "touch" }}
             >
               <div className="shrink-0 basis-2 sm:basis-5" />
               {activeCat.sites.map((site, i) => (

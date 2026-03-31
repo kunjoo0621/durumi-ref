@@ -15,7 +15,7 @@ const pretendard = localFont({
   display: "swap",
 });
 
-const SITE_URL = "https://durumiref.com";
+const SITE_URL = "https://www.durumiref.com";
 const TITLE = "Durumi Ref — 디자이너를 위한 레퍼런스 사이트 큐레이션";
 const DESCRIPTION = "UI/UX, 디자인 시스템, 에셋, 아이콘, 타이포그래피, 영감까지. 디자이너가 자주 보는 레퍼런스 사이트를 한곳에서 탐색하세요.";
 

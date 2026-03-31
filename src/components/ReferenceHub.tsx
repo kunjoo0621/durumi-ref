@@ -134,7 +134,7 @@ const OGThumb = memo(function OGThumb({ site, isHovered = false, variant = "mobi
   );
 });
 
-/* ─── Strip Card ─── */
+/* ─── Strip Card (B design) ─── */
 function StripCard({
   site, catColor, isHovered, isAnyHovered, index, onHover, onLeave,
 }: {
@@ -142,6 +142,7 @@ function StripCard({
   index: number; onHover: (i: number) => void; onLeave: () => void;
 }) {
   const isFaded = isAnyHovered && !isHovered;
+  const slug = site.url.replace(/[/:]/g, "_");
 
   const handleClick = useCallback((e: React.MouseEvent) => {
     const area = (e.currentTarget as HTMLElement).closest(".hscroll-area") as HTMLElement | null;
@@ -149,7 +150,7 @@ function StripCard({
   }, []);
 
   return (
-    <div className="h-full flex-shrink-0 basis-[180px] sm:basis-[260px]" style={{ position: "relative" }}>
+    <div className="h-full flex-shrink-0 basis-[260px] sm:basis-[320px]" style={{ position: "relative" }}>
       <a
         href={`https://${site.url}`} target="_blank" rel="noopener noreferrer"
         onClick={handleClick}
@@ -157,63 +158,93 @@ function StripCard({
         onTouchStart={() => onHover(index)} onTouchEnd={onLeave}
         draggable={false}
         style={{
-          display: "block", position: "absolute", inset: 0, borderRadius: "var(--radius-lg)",
-          overflow: "hidden", cursor: "pointer", userSelect: "none",
-          transform: isHovered ? "scale(1.08)" : isFaded ? "scale(0.96)" : "scale(1)",
+          display: "flex", flexDirection: "column", position: "absolute", inset: 0,
+          borderRadius: 20, overflow: "hidden", cursor: "pointer", userSelect: "none",
+          background: isHovered ? "var(--color-gray-5)" : "var(--color-gray-6)",
+          transform: isHovered ? "translateY(-6px)" : isFaded ? "scale(0.96)" : "translateY(0)",
           zIndex: isHovered ? 10 : 1,
           filter: isFaded ? "brightness(0.7) grayscale(0.3)" : "brightness(1) grayscale(0)",
-          boxShadow: isHovered ? `0 24px 64px rgba(0,0,0,0.6), 0 0 40px ${catColor}15` : "0 2px 12px rgba(0,0,0,0.1)",
-          transition: `transform 0.45s var(--ease-smooth), filter 0.4s ease, box-shadow 0.4s ease, z-index 0s`,
+          boxShadow: isHovered
+            ? "0 20px 48px rgba(0,0,0,0.5), 0 0 0 1px rgba(255,255,255,0.08)"
+            : "0 2px 8px rgba(0,0,0,0.2), 0 0 0 1px rgba(255,255,255,0.04)",
+          transition: `transform 0.35s var(--ease-smooth), filter 0.4s ease, box-shadow 0.35s ease, background 0.3s ease`,
           animation: "card-in 0.5s cubic-bezier(.16,1,.3,1) backwards",
           animationDelay: `${index * 55}ms`,
+          textDecoration: "none", color: "inherit",
         }}
       >
-        <div style={{ position: "absolute", inset: 0, overflow: "hidden" }}>
-          <OGThumb site={site} isHovered={isHovered} />
-        </div>
-
-        <div style={{
-          position: "absolute", bottom: 0, left: 0, right: 0, pointerEvents: "none", zIndex: 3,
-          height: isHovered ? "80%" : "60%",
-          background: isHovered
-            ? "linear-gradient(to top, rgba(0,0,0,0.95) 0%, rgba(0,0,0,0.55) 55%, transparent 100%)"
-            : "linear-gradient(to top, rgba(0,0,0,0.85) 0%, rgba(0,0,0,0.3) 60%, transparent 100%)",
-          transition: `height 0.45s var(--ease-smooth)`,
-        }} />
-
-        <div style={{
-          position: "absolute", bottom: 0, left: 0, right: 0, height: 2, zIndex: 5,
-          background: catColor,
-          opacity: isHovered ? 1 : 0,
-          transform: isHovered ? "scaleX(1)" : "scaleX(0)",
-          transformOrigin: "left",
-          transition: `opacity 0.3s, transform 0.45s var(--ease-smooth)`,
-        }} />
-
-        <div style={{ position: "absolute", bottom: 0, left: 0, right: 0, padding: "0 14px 24px", zIndex: 4, pointerEvents: "none" }}>
-          <div className="mb-1 flex items-center gap-2">
-            <Favicon domain={site.url} className="shrink-0 opacity-85" />
-            <span className="overflow-hidden text-sm font-bold text-white sm:text-base" style={{
-              textShadow: "0 1px 8px rgba(0,0,0,0.6)",
-              whiteSpace: "nowrap", textOverflow: "ellipsis",
-            }}>{site.name}</span>
-          </div>
+        {/* Thumbnail */}
+        <div style={{ padding: "16px 16px 0", flex: "0 0 auto" }}>
           <div style={{
-            fontSize: 12, color: "var(--color-label-2)",
-            textShadow: "0 1px 6px rgba(0,0,0,0.5)",
-          }}>{site.desc}</div>
+            borderRadius: 12, overflow: "hidden", aspectRatio: "16/10", position: "relative",
+            background: "var(--color-gray-4)",
+          }}>
+            <img
+              src={`/thumbnails/${slug}_desktop.jpg`}
+              alt={site.name}
+              loading="lazy" draggable={false}
+              style={{
+                position: "absolute", top: 0, left: 0,
+                width: "100%", height: "auto", objectFit: "cover",
+                transform: isHovered ? "translateY(-30%)" : "translateY(0)",
+                transition: isHovered
+                  ? "transform 4s cubic-bezier(0.25, 0.1, 0.25, 1)"
+                  : "transform 0.6s ease-out",
+              }}
+            />
+            {/* Noise grain */}
+            <div style={{
+              position: "absolute", inset: 0, zIndex: 2, pointerEvents: "none",
+              opacity: 0.06, mixBlendMode: "overlay",
+              backgroundImage: `url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E")`,
+            }} />
+            {/* Glass reflection */}
+            <div style={{
+              position: "absolute", inset: 0, zIndex: 3, pointerEvents: "none",
+              background: "linear-gradient(165deg, rgba(255,255,255,0.12) 0%, rgba(255,255,255,0.03) 30%, transparent 50%)",
+              opacity: isHovered ? 1 : 0.6,
+              transition: "opacity 0.4s ease",
+            }} />
+            {/* Arrow */}
+            <div style={{
+              position: "absolute", top: 8, right: 8, zIndex: 4,
+              width: 28, height: 28, borderRadius: 8,
+              background: "rgba(0,0,0,0.5)", backdropFilter: "blur(8px)",
+              display: "flex", alignItems: "center", justifyContent: "center",
+              opacity: isHovered ? 1 : 0,
+              transform: isHovered ? "scale(1)" : "scale(0.5)",
+              transition: "all 0.25s var(--ease-spring)",
+            }}>
+              <ArrowUpRight size={13} weight="bold" color="white" />
+            </div>
+          </div>
         </div>
 
-        <div style={{
-          position: "absolute", top: 10, right: 10, zIndex: 5,
-          width: 26, height: 26, borderRadius: 8,
-          background: "var(--glass-bg)", backdropFilter: "var(--glass-blur)",
-          display: "flex", alignItems: "center", justifyContent: "center",
-          opacity: isHovered ? 1 : 0,
-          transform: isHovered ? "scale(1)" : "scale(0.5)",
-          transition: `all 0.3s var(--ease-spring)`,
-        }}>
-          <ArrowUpRight size={12} weight="bold" color="white" />
+        {/* Info */}
+        <div style={{ padding: "24px 16px 0", flex: 1, display: "flex", flexDirection: "column" }}>
+          <div className="flex items-center gap-2.5" style={{ marginBottom: 8 }}>
+            <div style={{
+              transform: isHovered ? "scale(1.15)" : "scale(1)",
+              transition: "transform 0.3s var(--ease-spring)",
+              display: "flex", alignItems: "center",
+            }}>
+              <Favicon domain={site.url} size={18} />
+            </div>
+            <span style={{ fontSize: 16, fontWeight: 700, color: "white", letterSpacing: -0.3, lineHeight: 1 }}>{site.name}</span>
+          </div>
+          <div style={{ fontSize: 12, color: "rgba(235,235,245,0.5)", lineHeight: 1.6 }}>{site.desc}</div>
+        </div>
+
+        {/* Tags */}
+        <div style={{ padding: "0 16px 24px", display: "flex", gap: 6 }}>
+          {site.tags.map((tag) => (
+            <span key={tag} style={{
+              padding: "5px 12px", borderRadius: 999, fontSize: 11, fontWeight: 500,
+              background: isHovered ? "var(--color-gray-3)" : "var(--color-gray-4)",
+              color: "rgba(235,235,245,0.5)",
+              transition: "background 0.3s",
+            }}>{tag}</span>
+          ))}
         </div>
       </a>
     </div>
@@ -586,7 +617,7 @@ export default function ReferenceHub() {
               data-dragged="false"
               onMouseDown={onMouseDown}
               onMouseLeave={() => setHoveredCard(null)}
-              style={{ height: "clamp(320px, 62vh, 560px)", cursor: "grab", scrollbarWidth: "none", WebkitOverflowScrolling: "touch" }}
+              style={{ height: "clamp(360px, 55vh, 480px)", cursor: "grab", scrollbarWidth: "none", WebkitOverflowScrolling: "touch" }}
             >
               <div className="shrink-0 basis-2 sm:basis-5" />
               {activeCat.sites.map((site, i) => (

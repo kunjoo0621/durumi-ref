@@ -228,7 +228,7 @@ function StripCard({
               transition: "transform 0.3s var(--ease-spring)",
               display: "flex", alignItems: "center",
             }}>
-              <Favicon domain={site.url} size={18} />
+              <Favicon domain={site.url} size={20} />
             </div>
             <span style={{ fontSize: 16, fontWeight: 700, color: "white", letterSpacing: -0.3, lineHeight: 1 }}>{site.name}</span>
           </div>
@@ -274,7 +274,7 @@ function ListCard({ site, index }: { site: Site; index: number }) {
       </div>
       <div style={{ padding: "10px 2px 4px" }}>
         <div className="mb-0.5 flex items-center gap-[7px]">
-          <Favicon domain={site.url} />
+          <Favicon domain={site.url} size={20} />
           <span className="flex-1 text-base font-semibold text-white">{site.name}</span>
         </div>
         <span style={{ fontSize: 14, color: "var(--color-label-2)" }}>{site.desc}</span>

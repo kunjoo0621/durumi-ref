@@ -232,7 +232,7 @@ function StripCard({
             </div>
             <span style={{ fontSize: 16, fontWeight: 700, color: "white", letterSpacing: -0.3, lineHeight: 1 }}>{site.name}</span>
           </div>
-          <div style={{ fontSize: 12, color: "rgba(235,235,245,0.5)", lineHeight: 1.6 }}>{site.desc}</div>
+          <div style={{ fontSize: 14, color: "rgba(235,235,245,0.5)", lineHeight: 1.6 }}>{site.desc}</div>
           <div style={{ minHeight: 40, flex: 1 }} />
         </div>
 
@@ -275,9 +275,9 @@ function ListCard({ site, index }: { site: Site; index: number }) {
       <div style={{ padding: "10px 2px 4px" }}>
         <div className="mb-0.5 flex items-center gap-[7px]">
           <Favicon domain={site.url} />
-          <span className="flex-1 text-[15px] font-semibold text-white">{site.name}</span>
+          <span className="flex-1 text-base font-semibold text-white">{site.name}</span>
         </div>
-        <span style={{ fontSize: 13, color: "var(--color-label-3)" }}>{site.desc}</span>
+        <span style={{ fontSize: 14, color: "var(--color-label-3)" }}>{site.desc}</span>
       </div>
     </a>
   );

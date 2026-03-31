@@ -23,8 +23,9 @@ export async function POST(req: Request) {
     if (error) throw error;
 
     return NextResponse.json({ ok: true });
-  } catch (error) {
-    console.error("Submit error:", error);
-    return NextResponse.json({ error: "전송에 실패했습니다." }, { status: 500 });
+  } catch (error: unknown) {
+    const msg = error instanceof Error ? error.message : String(error);
+    console.error("Submit error:", msg);
+    return NextResponse.json({ error: "전송에 실패했습니다.", detail: msg }, { status: 500 });
   }
 }

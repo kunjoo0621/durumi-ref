@@ -186,7 +186,7 @@ function StripCard({
               loading="lazy" draggable={false}
               style={{
                 position: "absolute", top: 0, left: 0,
-                width: "100%", height: "auto",
+                width: "100%", minHeight: "100%", height: "auto",
                 transform: isHovered ? "translateY(-48%)" : "translateY(0)",
                 transition: isHovered
                   ? "transform 4s cubic-bezier(0.25, 0.1, 0.25, 1)"

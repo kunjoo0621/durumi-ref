@@ -277,7 +277,7 @@ function ListCard({ site, index }: { site: Site; index: number }) {
           <Favicon domain={site.url} />
           <span className="flex-1 text-base font-semibold text-white">{site.name}</span>
         </div>
-        <span style={{ fontSize: 14, color: "var(--color-label-3)" }}>{site.desc}</span>
+        <span style={{ fontSize: 14, color: "var(--color-label-2)" }}>{site.desc}</span>
       </div>
     </a>
   );

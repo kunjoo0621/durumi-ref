@@ -20,7 +20,9 @@ export async function POST(req: Request) {
       category: category || null,
     });
 
-    if (error) throw error;
+    if (error) {
+      return NextResponse.json({ error: "전송에 실패했습니다.", detail: error.message, code: error.code }, { status: 500 });
+    }
 
     return NextResponse.json({ ok: true });
   } catch (error: unknown) {

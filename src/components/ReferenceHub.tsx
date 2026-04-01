@@ -317,37 +317,12 @@ function DockItem({ cat, isActive, onClick, scale = 1, hideActiveTooltip = false
   );
 }
 
-/* ─── Mobile Tab Item (iOS style) ─── */
-function MobileTabItem({ cat, isActive, onClick }: { cat: Category; isActive: boolean; onClick: (id: string) => void }) {
-  const Icon = CATEGORY_ICONS[cat.id];
-  return (
-    <button
-      onClick={() => onClick(cat.id)}
-      aria-label={cat.label}
-      className="flex shrink-0 flex-col items-center justify-center gap-0.5 border-none"
-      style={{
-        background: "transparent",
-        cursor: "pointer",
-        fontFamily: "inherit",
-        padding: "8px 14px",
-        minHeight: 48,
-        color: isActive ? cat.color : "var(--color-gray-1)",
-        transition: "color 0.2s",
-      }}
-    >
-      {Icon && <Icon size={20} weight="fill" />}
-      <span style={{
-        fontSize: 9,
-        fontWeight: isActive ? 600 : 400,
-        letterSpacing: 0.1,
-      }}>{cat.shortLabel}</span>
-    </button>
-  );
-}
-
-/* ─── Dock Bar (desktop: macOS magnification / mobile: iOS tab bar) ─── */
+/* ─── Dock Bar (desktop: macOS magnification / mobile: floating menu) ─── */
 function DockBar({ categories: cats, activeTab, onTabChange }: { categories: Category[]; activeTab: string; onTabChange: (id: string) => void }) {
   const [hoveredIdx, setHoveredIdx] = useState<number | null>(null);
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const activeCat = cats.find((c) => c.id === activeTab);
+  const ActiveIcon = activeCat ? CATEGORY_ICONS[activeCat.id] : null;
 
   const getScale = (index: number) => {
     if (hoveredIdx === null) return 1;
@@ -358,16 +333,80 @@ function DockBar({ categories: cats, activeTab, onTabChange }: { categories: Cat
     return 1;
   };
 
+  const handleMobileSelect = (id: string) => {
+    onTabChange(id);
+    setMobileMenuOpen(false);
+  };
+
   return (
     <>
-      {/* Mobile: iOS tab bar */}
-      <div className="safe-bottom absolute inset-x-0 bottom-0 z-10 sm:hidden"
-        style={{ borderTop: "1px solid var(--glass-border)", background: "var(--glass-bg-strong)", backdropFilter: "var(--glass-blur)", WebkitBackdropFilter: "var(--glass-blur)" }}>
-        <div className="hide-scrollbar flex items-center overflow-x-auto">
-          {cats.map((cat) => (
-            <MobileTabItem key={cat.id} cat={cat} isActive={activeTab === cat.id} onClick={onTabChange} />
-          ))}
-        </div>
+      {/* Mobile: floating button + fullscreen menu */}
+      <div className="sm:hidden">
+        {/* Floating pill button */}
+        <button
+          onClick={() => setMobileMenuOpen(true)}
+          className="safe-bottom fixed inset-x-0 bottom-0 z-20 mx-auto mb-5 flex w-fit items-center gap-2 border-none"
+          style={{
+            padding: "10px 20px",
+            borderRadius: 999,
+            background: "var(--glass-bg-strong)",
+            backdropFilter: "var(--glass-blur)",
+            WebkitBackdropFilter: "var(--glass-blur)",
+            border: "1px solid var(--glass-border)",
+            boxShadow: "0 4px 24px rgba(0,0,0,0.4)",
+            cursor: "pointer",
+            fontFamily: "inherit",
+            color: activeCat?.color || "var(--color-label)",
+          }}
+        >
+          {ActiveIcon && <ActiveIcon size={16} weight="fill" />}
+          <span style={{ fontSize: 13, fontWeight: 600, color: "var(--color-label)" }}>{activeCat?.shortLabel}</span>
+        </button>
+
+        {/* Fullscreen overlay menu */}
+        {mobileMenuOpen && (
+          <div
+            className="fixed inset-0 z-50 flex flex-col items-center justify-center"
+            style={{
+              background: "rgba(0,0,0,0.85)",
+              backdropFilter: "blur(20px)",
+              WebkitBackdropFilter: "blur(20px)",
+              animation: "fade-up 0.25s cubic-bezier(.16,1,.3,1)",
+            }}
+            onClick={() => setMobileMenuOpen(false)}
+          >
+            <nav className="flex flex-col items-center gap-2">
+              {cats.map((cat, i) => {
+                const Icon = CATEGORY_ICONS[cat.id];
+                const isActive = activeTab === cat.id;
+                return (
+                  <button
+                    key={cat.id}
+                    onClick={(e) => { e.stopPropagation(); handleMobileSelect(cat.id); }}
+                    className="flex items-center gap-3 border-none"
+                    style={{
+                      padding: "14px 28px",
+                      borderRadius: 16,
+                      background: isActive ? "rgba(255,255,255,0.08)" : "transparent",
+                      cursor: "pointer",
+                      fontFamily: "inherit",
+                      color: isActive ? cat.color : "var(--color-label-2)",
+                      fontSize: 18,
+                      fontWeight: isActive ? 700 : 500,
+                      letterSpacing: -0.3,
+                      animation: "fade-up 0.3s cubic-bezier(.16,1,.3,1) backwards",
+                      animationDelay: `${i * 40}ms`,
+                      transition: "color 0.2s",
+                    }}
+                  >
+                    {Icon && <Icon size={22} weight="fill" />}
+                    {cat.label}
+                  </button>
+                );
+              })}
+            </nav>
+          </div>
+        )}
       </div>
 
       {/* Desktop: glassmorphism dock */}

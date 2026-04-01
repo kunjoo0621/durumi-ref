@@ -96,10 +96,10 @@ const OGThumb = memo(function OGThumb({ site }: { site: Site }) {
           }}
         />
       ) : (
-        <div className="absolute inset-0 flex flex-col items-center justify-center gap-2"
-          style={{ background: `linear-gradient(145deg, var(--color-gray-4), var(--color-gray-6))` }}>
-          <Favicon domain={site.url} size={28} className="opacity-60" />
-          <span className="text-base font-bold" style={{ color: "var(--color-label-3)" }}>{site.name}</span>
+        <div className="absolute inset-0 flex flex-col items-center justify-center gap-4"
+          style={{ background: "var(--color-gray-5)" }}>
+          <Favicon domain={site.url} size={48} className="rounded-xl opacity-80" />
+          <span style={{ fontSize: 15, fontWeight: 600, color: "var(--color-label-2)", letterSpacing: -0.2 }}>{site.name}</span>
         </div>
       )}
     </div>

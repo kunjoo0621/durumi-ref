@@ -85,6 +85,7 @@ export const categories: Category[] = [
       { name: "Perplexity", url: "perplexity.ai", desc: "AI 검색 엔진", tags: ["검색", "리서치"] },
       { name: "Runway", url: "runwayml.com", desc: "AI 영상·이미지 생성", tags: ["영상", "생성"] },
       { name: "There's An AI For That", url: "theresanaiforthat.com", desc: "AI 도구 검색 디렉토리", tags: ["디렉토리", "검색"] },
+      { name: "Lilys AI", url: "lilys.ai/ko", desc: "AI 영상·문서 요약 서비스", tags: ["요약", "생산성"] },
       { name: "Future Tools", url: "futuretools.io", desc: "AI 도구 큐레이션", tags: ["큐레이션", "트렌드"] },
     ],
   },

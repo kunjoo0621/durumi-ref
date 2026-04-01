@@ -50,17 +50,12 @@ function Favicon({ domain, size = 14, className = "" }: { domain: string; size?:
 }
 
 /* ─── OG Thumbnail ─── */
-const OGThumb = memo(function OGThumb({ site, isHovered = false, variant = "mobile" }: { site: Site; isHovered?: boolean; variant?: "mobile" | "desktop" }) {
+const OGThumb = memo(function OGThumb({ site }: { site: Site }) {
   const [status, setStatus] = useState<"loading" | "loaded" | "error">("loading");
   const [srcIdx, setSrcIdx] = useState(0);
-  const [imgHeight, setImgHeight] = useState(0);
-  const containerRef = useRef<HTMLDivElement>(null);
   const slug = site.url.replace(/[/:]/g, "_");
-  const localPath = variant === "desktop"
-    ? `/thumbnails/${slug}_desktop.jpg`
-    : `/thumbnails/${slug}.jpg`;
   const sources = [
-    localPath,
+    `/thumbnails/${slug}_desktop.jpg`,
     `https://s.wordpress.com/mshots/v1/${encodeURIComponent("https://" + site.url)}?w=640&h=800`,
   ];
 
@@ -73,27 +68,8 @@ const OGThumb = memo(function OGThumb({ site, isHovered = false, variant = "mobi
     }
   };
 
-  const handleLoad = (e: React.SyntheticEvent<HTMLImageElement>) => {
-    setStatus("loaded");
-    const img = e.currentTarget;
-    const containerWidth = containerRef.current?.clientWidth || 260;
-    const scaledHeight = (img.naturalHeight / img.naturalWidth) * containerWidth;
-    setImgHeight(scaledHeight);
-  };
-
-  const [containerHeight, setContainerHeight] = useState(400);
-
-  useEffect(() => {
-    if (containerRef.current) setContainerHeight(containerRef.current.clientHeight);
-  }, []);
-
-  const rawScroll = Math.max(0, imgHeight - containerHeight);
-  const scrollDistance = Math.min(rawScroll, containerHeight * 2);
-  const canScroll = scrollDistance > 40;
-  const scrollDuration = 4;
-
   return (
-    <div ref={containerRef} className="absolute inset-0 overflow-hidden">
+    <div className="absolute inset-0 overflow-hidden">
       {status === "loading" && (
         <div
           className="absolute inset-0 z-[2]"
@@ -109,20 +85,14 @@ const OGThumb = memo(function OGThumb({ site, isHovered = false, variant = "mobi
         <img
           src={sources[srcIdx]}
           alt={site.name}
-          onLoad={handleLoad}
+          onLoad={() => setStatus("loaded")}
           onError={handleError}
           loading="lazy"
           draggable={false}
-          className="absolute left-0 top-0 w-full select-none"
+          className="absolute inset-0 h-full w-full object-cover object-top select-none"
           style={{
-            objectFit: "cover",
-            objectPosition: "top",
-            height: canScroll ? "auto" : "100%",
             opacity: status === "loaded" ? 1 : 0,
-            transform: isHovered && canScroll ? `translateY(-${scrollDistance}px)` : "translateY(0)",
-            transition: isHovered
-              ? `transform ${scrollDuration}s cubic-bezier(0.25, 0.1, 0.25, 1), opacity 0.5s ease`
-              : "transform 0.6s ease-out, opacity 0.5s ease",
+            transition: "opacity 0.5s ease",
           }}
         />
       ) : (
@@ -273,7 +243,7 @@ function ListCard({ site, index }: { site: Site; index: number }) {
       }}
     >
       <div style={{ borderRadius: "var(--radius-lg)", overflow: "hidden", aspectRatio: "16/10", position: "relative", background: "var(--color-gray-5)" }}>
-        <OGThumb site={site} variant="desktop" />
+        <OGThumb site={site} />
       </div>
       <div style={{ padding: "10px 2px 4px" }}>
         <div className="mb-0.5 flex items-center gap-[7px]">

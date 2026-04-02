@@ -694,23 +694,37 @@ export default function ReferenceHub() {
             </button>
           </div>
 
-          {/* Submit pill */}
-          <button
-            onClick={() => setSubmitOpen(true)}
-            className="header-btn-submit shrink-0 border-none"
-            style={{
-              padding: "8px 18px",
-              borderRadius: 999,
-              background: "var(--color-label)",
-              color: "var(--color-bg)",
-              fontSize: 13,
-              fontWeight: 600,
-              fontFamily: "inherit",
-              cursor: "pointer",
-            }}
-          >
-            제보
-          </button>
+          {/* Submit pill + tooltip */}
+          <div className="relative">
+            <button
+              onClick={() => setSubmitOpen(true)}
+              className="header-btn-submit shrink-0 border-none"
+              style={{
+                padding: "8px 18px",
+                borderRadius: 999,
+                background: "var(--color-label)",
+                color: "var(--color-bg)",
+                fontSize: 13,
+                fontWeight: 600,
+                fontFamily: "inherit",
+                cursor: "pointer",
+              }}
+            >
+              제보
+            </button>
+            <div className="submit-tooltip absolute right-0 top-[calc(100%+10px)] hidden whitespace-nowrap sm:block" style={{
+              padding: "8px 14px",
+              borderRadius: 10,
+              background: "var(--color-gray-5)",
+              border: "1px solid var(--glass-border)",
+              fontSize: 12,
+              color: "var(--color-label-2)",
+              pointerEvents: "none",
+              animation: "fade-up 0.4s cubic-bezier(.16,1,.3,1) backwards 2s",
+            }}>
+              자주 보는 레퍼런스 사이트가 있다면 알려주세요 ✌️
+            </div>
+          </div>
         </div>
       </header>
 

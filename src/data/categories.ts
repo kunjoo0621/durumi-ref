@@ -3,7 +3,11 @@ export interface Site {
   url: string;
   desc: string;
   tags: string[];
+  addedAt?: string; // ISO date, e.g. "2026-04-01"
 }
+
+// Sites added within this many days get a NEW badge
+export const NEW_BADGE_DAYS = 14;
 
 export interface Category {
   id: string;
@@ -76,17 +80,17 @@ export const categories: Category[] = [
     shortLabel: "AI",
     color: COLORS.indigo,
     sites: [
-      { name: "ChatGPT", url: "chatgpt.com", desc: "OpenAI의 대화형 AI", tags: ["대화", "OpenAI"] },
-      { name: "Claude", url: "claude.ai", desc: "Anthropic의 AI 어시스턴트", tags: ["대화", "Anthropic"] },
-      { name: "Midjourney", url: "midjourney.com", desc: "AI 이미지 생성 도구", tags: ["이미지", "생성"] },
-      { name: "Galileo AI", url: "galileo.ai", desc: "AI 기반 UI 디자인 생성", tags: ["UI", "디자인"] },
-      { name: "v0", url: "v0.dev", desc: "AI 기반 UI 코드 생성", tags: ["UI", "코드"] },
-      { name: "Cursor", url: "cursor.com", desc: "AI 코딩 에디터", tags: ["코딩", "에디터"] },
-      { name: "Perplexity", url: "perplexity.ai", desc: "AI 검색 엔진", tags: ["검색", "리서치"] },
-      { name: "Runway", url: "runwayml.com", desc: "AI 영상·이미지 생성", tags: ["영상", "생성"] },
-      { name: "There's An AI For That", url: "theresanaiforthat.com", desc: "AI 도구 검색 디렉토리", tags: ["디렉토리", "검색"] },
-      { name: "Lilys AI", url: "lilys.ai/ko", desc: "AI 영상·문서 요약 서비스", tags: ["요약", "생산성"] },
-      { name: "Future Tools", url: "futuretools.io", desc: "AI 도구 큐레이션", tags: ["큐레이션", "트렌드"] },
+      { name: "ChatGPT", url: "chatgpt.com", desc: "OpenAI의 대화형 AI", tags: ["대화", "OpenAI"], addedAt: "2026-04-01" },
+      { name: "Claude", url: "claude.ai", desc: "Anthropic의 AI 어시스턴트", tags: ["대화", "Anthropic"], addedAt: "2026-04-01" },
+      { name: "Midjourney", url: "midjourney.com", desc: "AI 이미지 생성 도구", tags: ["이미지", "생성"], addedAt: "2026-04-01" },
+      { name: "Galileo AI", url: "galileo.ai", desc: "AI 기반 UI 디자인 생성", tags: ["UI", "디자인"], addedAt: "2026-04-01" },
+      { name: "v0", url: "v0.dev", desc: "AI 기반 UI 코드 생성", tags: ["UI", "코드"], addedAt: "2026-04-01" },
+      { name: "Cursor", url: "cursor.com", desc: "AI 코딩 에디터", tags: ["코딩", "에디터"], addedAt: "2026-04-01" },
+      { name: "Perplexity", url: "perplexity.ai", desc: "AI 검색 엔진", tags: ["검색", "리서치"], addedAt: "2026-04-01" },
+      { name: "Runway", url: "runwayml.com", desc: "AI 영상·이미지 생성", tags: ["영상", "생성"], addedAt: "2026-04-01" },
+      { name: "There's An AI For That", url: "theresanaiforthat.com", desc: "AI 도구 검색 디렉토리", tags: ["디렉토리", "검색"], addedAt: "2026-04-01" },
+      { name: "Lilys AI", url: "lilys.ai/ko", desc: "AI 영상·문서 요약 서비스", tags: ["요약", "생산성"], addedAt: "2026-04-01" },
+      { name: "Future Tools", url: "futuretools.io", desc: "AI 도구 큐레이션", tags: ["큐레이션", "트렌드"], addedAt: "2026-04-01" },
     ],
   },
   {

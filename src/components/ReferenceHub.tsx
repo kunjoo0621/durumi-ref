@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useRef, useCallback, useEffect, memo } from "react";
-import { categories, type Site, type Category } from "@/data/categories";
+import { categories, type Site, type Category, NEW_BADGE_DAYS } from "@/data/categories";
 import {
   Layout,
   SquaresFour,
@@ -15,9 +15,17 @@ import {
   Rows,
   GridFour,
   ArrowUpRight,
+  Heart,
 } from "@phosphor-icons/react";
 import type { ComponentType } from "react";
 import CustomCursor from "./CustomCursor";
+import { useBookmarks } from "@/hooks/useBookmarks";
+
+function isNew(addedAt?: string): boolean {
+  if (!addedAt) return false;
+  const diff = Date.now() - new Date(addedAt).getTime();
+  return diff < NEW_BADGE_DAYS * 24 * 60 * 60 * 1000;
+}
 import SubmitModal from "./SubmitModal";
 
 const CATEGORY_ICONS: Record<string, ComponentType<{ size?: number; weight?: "regular" | "fill" | "bold" }>> = {
@@ -108,10 +116,11 @@ const OGThumb = memo(function OGThumb({ site }: { site: Site }) {
 
 /* ─── Strip Card (B design) ─── */
 function StripCard({
-  site, catColor, isHovered, isAnyHovered, index, onHover, onLeave,
+  site, catColor, isHovered, isAnyHovered, index, onHover, onLeave, bookmarked, onBookmark,
 }: {
   site: Site; catColor: string; isHovered: boolean; isAnyHovered: boolean;
   index: number; onHover: (i: number) => void; onLeave: () => void;
+  bookmarked: boolean; onBookmark: () => void;
 }) {
   const isFaded = isAnyHovered && !isHovered;
   const slug = site.url.replace(/[/:]/g, "_");
@@ -190,6 +199,31 @@ function StripCard({
             }}>
               <ArrowUpRight size={13} weight="bold" color="white" />
             </div>
+            {/* Bookmark button */}
+            <button
+              onClick={(e) => { e.preventDefault(); e.stopPropagation(); onBookmark(); }}
+              style={{
+                position: "absolute", top: 8, left: 8, zIndex: 4,
+                width: 28, height: 28, borderRadius: 8,
+                background: "rgba(0,0,0,0.5)", backdropFilter: "blur(8px)",
+                display: "flex", alignItems: "center", justifyContent: "center",
+                border: "none", cursor: "pointer", padding: 0,
+                opacity: bookmarked || isHovered ? 1 : 0,
+                transform: bookmarked || isHovered ? "scale(1)" : "scale(0.5)",
+                transition: "all 0.25s var(--ease-spring)",
+              }}
+            >
+              <Heart size={13} weight={bookmarked ? "fill" : "bold"} color={bookmarked ? "#FF375F" : "white"} />
+            </button>
+            {/* NEW badge */}
+            {isNew(site.addedAt) && (
+              <div style={{
+                position: "absolute", bottom: 8, left: 8, zIndex: 4,
+                padding: "3px 8px", borderRadius: 6,
+                background: catColor, color: "#000",
+                fontSize: 10, fontWeight: 700, letterSpacing: 0.5,
+              }}>NEW</div>
+            )}
           </div>
         </div>
 
@@ -226,25 +260,34 @@ function StripCard({
 }
 
 /* ─── List Card ─── */
-function ListCard({ site, index }: { site: Site; index: number }) {
+function ListCard({ site, index, bookmarked, onBookmark }: { site: Site; index: number; bookmarked: boolean; onBookmark: () => void }) {
   const [hov, setHov] = useState(false);
   return (
-    <a
-      href={`https://${site.url}`} target="_blank" rel="noopener noreferrer"
-      onMouseEnter={() => setHov(true)} onMouseLeave={() => setHov(false)}
-      style={{
-        display: "block", borderRadius: "var(--radius-lg)", overflow: "hidden", cursor: "pointer",
-        transition: `transform 0.35s var(--ease-smooth), box-shadow 0.35s ease`,
-        transform: hov ? "scale(1.02)" : "scale(1)",
-        boxShadow: hov ? "0 16px 44px rgba(0,0,0,0.35)" : "none",
-        animation: "fade-up 0.4s cubic-bezier(.16,1,.3,1) backwards",
-        animationDelay: `${index * 40}ms`,
-        textDecoration: "none", color: "inherit",
-      }}
-    >
-      <div style={{ borderRadius: "var(--radius-lg)", overflow: "hidden", aspectRatio: "16/10", position: "relative", background: "var(--color-gray-5)" }}>
-        <OGThumb site={site} />
-      </div>
+    <div style={{ position: "relative" }}>
+      <a
+        href={`https://${site.url}`} target="_blank" rel="noopener noreferrer"
+        onMouseEnter={() => setHov(true)} onMouseLeave={() => setHov(false)}
+        style={{
+          display: "block", borderRadius: "var(--radius-lg)", overflow: "hidden", cursor: "pointer",
+          transition: `transform 0.35s var(--ease-smooth), box-shadow 0.35s ease`,
+          transform: hov ? "scale(1.02)" : "scale(1)",
+          boxShadow: hov ? "0 16px 44px rgba(0,0,0,0.35)" : "none",
+          animation: "fade-up 0.4s cubic-bezier(.16,1,.3,1) backwards",
+          animationDelay: `${index * 40}ms`,
+          textDecoration: "none", color: "inherit",
+        }}
+      >
+        <div style={{ borderRadius: "var(--radius-lg)", overflow: "hidden", aspectRatio: "16/10", position: "relative", background: "var(--color-gray-5)" }}>
+          <OGThumb site={site} />
+          {isNew(site.addedAt) && (
+            <div style={{
+              position: "absolute", top: 8, left: 8, zIndex: 4,
+              padding: "3px 8px", borderRadius: 6,
+              background: "var(--color-blue)", color: "#000",
+              fontSize: 10, fontWeight: 700, letterSpacing: 0.5,
+            }}>NEW</div>
+          )}
+        </div>
       <div style={{ padding: "10px 2px 4px" }}>
         <div className="mb-0.5 flex items-center gap-[7px]">
           <Favicon domain={site.url} size={20} />
@@ -253,6 +296,23 @@ function ListCard({ site, index }: { site: Site; index: number }) {
         <span style={{ fontSize: 14, color: "var(--color-label-2)" }}>{site.desc}</span>
       </div>
     </a>
+    <button
+      onClick={onBookmark}
+      style={{
+        position: "absolute", top: 8, right: 8, zIndex: 4,
+        width: 32, height: 32, borderRadius: 8,
+        background: "rgba(0,0,0,0.5)", backdropFilter: "blur(8px)",
+        display: "flex", alignItems: "center", justifyContent: "center",
+        border: "none", cursor: "pointer", padding: 0,
+        opacity: bookmarked ? 1 : 0,
+        transition: "opacity 0.2s",
+      }}
+      onMouseEnter={(e) => { (e.currentTarget as HTMLElement).style.opacity = "1"; }}
+      onMouseLeave={(e) => { if (!bookmarked) (e.currentTarget as HTMLElement).style.opacity = "0"; }}
+    >
+      <Heart size={14} weight={bookmarked ? "fill" : "bold"} color={bookmarked ? "#FF375F" : "white"} />
+    </button>
+    </div>
   );
 }
 
@@ -450,6 +510,7 @@ export default function ReferenceHub() {
   const [transitioning, setTransitioning] = useState(false);
   const [hoveredCard, setHoveredCard] = useState<number | null>(null);
   const [submitOpen, setSubmitOpen] = useState(false);
+  const { toggle: toggleBookmark, isBookmarked } = useBookmarks();
   const scrollRef = useRef<HTMLDivElement>(null);
   const isDragging = useRef(false);
   const dragStart = useRef({ x: 0, scroll: 0 });
@@ -641,6 +702,8 @@ export default function ReferenceHub() {
                   isAnyHovered={hoveredCard !== null}
                   onHover={setHoveredCard}
                   onLeave={() => setHoveredCard(null)}
+                  bookmarked={isBookmarked(site.url)}
+                  onBookmark={() => toggleBookmark(site.url)}
                 />
               ))}
               <div className="shrink-0 basis-2 sm:basis-5" />
@@ -650,7 +713,7 @@ export default function ReferenceHub() {
           <div className="relative flex-1 overflow-y-auto px-4 pt-16 pb-32 sm:px-5 sm:pt-20 sm:pb-36">
             <div className="mx-auto grid max-w-[640px] grid-cols-1 gap-6 sm:grid-cols-2 sm:gap-8">
               {activeCat.sites.map((site, i) => (
-                <ListCard key={`${activeTab}-${site.name}`} site={site} index={i} />
+                <ListCard key={`${activeTab}-${site.name}`} site={site} index={i} bookmarked={isBookmarked(site.url)} onBookmark={() => toggleBookmark(site.url)} />
               ))}
             </div>
           </div>

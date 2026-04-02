@@ -37,6 +37,7 @@ const CATEGORY_ICONS: Record<string, ComponentType<{ size?: number; weight?: "re
   icon: Star,
   typo: TextAa,
   inspiration: Lightbulb,
+  favorites: Heart,
 };
 
 /* ─── Favicon ─── */
@@ -464,6 +465,26 @@ function DockBar({ categories: cats, activeTab, onTabChange }: { categories: Cat
                   </button>
                 );
               })}
+              {/* Divider */}
+              <div style={{ width: 40, height: 1, background: "var(--color-gray-3)", opacity: 0.3, margin: "8px 0" }} />
+              {/* Favorites */}
+              <button
+                onClick={(e) => { e.stopPropagation(); handleMobileSelect("favorites"); }}
+                className="flex items-center gap-3 border-none"
+                style={{
+                  padding: "14px 28px", borderRadius: 16,
+                  background: activeTab === "favorites" ? "rgba(255,255,255,0.08)" : "transparent",
+                  cursor: "pointer", fontFamily: "inherit",
+                  color: activeTab === "favorites" ? "#FF375F" : "var(--color-label-2)",
+                  fontSize: 18, fontWeight: activeTab === "favorites" ? 700 : 500,
+                  letterSpacing: -0.3,
+                  animation: "fade-up 0.3s cubic-bezier(.16,1,.3,1) backwards",
+                  animationDelay: `${cats.length * 40}ms`,
+                }}
+              >
+                <Heart size={22} weight="fill" />
+                Favorites
+              </button>
             </nav>
           </div>
         )}
@@ -488,6 +509,17 @@ function DockBar({ categories: cats, activeTab, onTabChange }: { categories: Cat
               <DockItem cat={cat} isActive={activeTab === cat.id} onClick={onTabChange} scale={getScale(i)} hideActiveTooltip={hoveredIdx !== null && !(activeTab === cat.id && hoveredIdx === i)} />
             </div>
           ))}
+          {/* Divider + Favorites */}
+          <div style={{ width: 1, height: 32, background: "var(--color-gray-3)", opacity: 0.3, margin: "0 4px", alignSelf: "center" }} />
+          <div onMouseEnter={() => setHoveredIdx(cats.length)}>
+            <DockItem
+              cat={{ id: "favorites", label: "Favorites", shortLabel: "즐겨찾기", color: "#FF375F", sites: [] }}
+              isActive={activeTab === "favorites"}
+              onClick={onTabChange}
+              scale={getScale(cats.length)}
+              hideActiveTooltip={hoveredIdx !== null && !(activeTab === "favorites" && hoveredIdx === cats.length)}
+            />
+          </div>
         </div>
       </div>
     </>
@@ -515,7 +547,13 @@ export default function ReferenceHub() {
   const isDragging = useRef(false);
   const dragStart = useRef({ x: 0, scroll: 0 });
 
-  const activeCat = categories.find((c) => c.id === activeTab)!;
+  const isFavoritesTab = activeTab === "favorites";
+  const favoritesSites = isFavoritesTab
+    ? categories.flatMap((c) => c.sites).filter((s) => isBookmarked(s.url))
+    : [];
+  const activeCat = isFavoritesTab
+    ? { id: "favorites", label: "Favorites", shortLabel: "즐겨찾기", color: "#FF375F", sites: favoritesSites }
+    : categories.find((c) => c.id === activeTab)!;
 
   const switchTab = (id: string) => {
     if (id === activeTab) return;

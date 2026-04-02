@@ -7,6 +7,6 @@ export default function robots(): MetadataRoute.Robots {
       allow: "/",
       disallow: ["/api/", "/preview/"],
     },
-    sitemap: "https://www.durumiref.com/sitemap.xml",
+    sitemap: "https://durumiref.com/sitemap.xml",
   };
 }

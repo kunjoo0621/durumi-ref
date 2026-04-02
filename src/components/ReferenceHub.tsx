@@ -544,6 +544,7 @@ export default function ReferenceHub() {
   const [transitioning, setTransitioning] = useState(false);
   const [hoveredCard, setHoveredCard] = useState<number | null>(null);
   const [submitOpen, setSubmitOpen] = useState(false);
+  const [tooltipVisible, setTooltipVisible] = useState(true);
   const { toggle: toggleBookmark, isBookmarked } = useBookmarks();
   const scrollRef = useRef<HTMLDivElement>(null);
   const isDragging = useRef(false);
@@ -712,18 +713,30 @@ export default function ReferenceHub() {
             >
               제보
             </button>
-            <div className="submit-tooltip absolute right-0 top-[calc(100%+10px)] hidden whitespace-nowrap sm:block" style={{
-              padding: "8px 14px",
-              borderRadius: 10,
-              background: "var(--color-gray-5)",
-              border: "1px solid var(--glass-border)",
-              fontSize: 12,
-              color: "var(--color-label-2)",
-              pointerEvents: "none",
-              animation: "fade-up 0.4s cubic-bezier(.16,1,.3,1) backwards 2s",
-            }}>
-              자주 보는 레퍼런스 사이트가 있다면 알려주세요 ✌️
-            </div>
+            {tooltipVisible && (
+              <div className="submit-tooltip absolute right-0 top-[calc(100%+10px)] hidden sm:flex" style={{
+                padding: "8px 12px 8px 14px",
+                borderRadius: 10,
+                background: "var(--color-gray-5)",
+                border: "1px solid var(--glass-border)",
+                fontSize: 12,
+                color: "var(--color-label-2)",
+                alignItems: "center",
+                gap: 8,
+                whiteSpace: "nowrap",
+              }}>
+                자주 보는 레퍼런스 사이트가 있다면 알려주세요
+                <button
+                  onClick={() => setTooltipVisible(false)}
+                  style={{
+                    background: "none", border: "none", cursor: "pointer", padding: 0,
+                    color: "var(--color-gray-1)", fontSize: 14, lineHeight: 1,
+                    display: "flex", alignItems: "center",
+                  }}
+                  aria-label="닫기"
+                >×</button>
+              </div>
+            )}
           </div>
         </div>
       </header>

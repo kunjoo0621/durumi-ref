@@ -161,15 +161,17 @@ function StripCard({
             borderRadius: 12, overflow: "hidden", aspectRatio: "16/10", position: "relative",
             background: "var(--color-gray-4)",
           }}>
-            {/* Max scroll: 48% of image height (1280x1600 in 16:10 container) */}
             <img
               src={`/thumbnails/${slug}_desktop.jpg`}
               alt={site.name}
               loading="lazy" draggable={false}
               style={{
-                position: "absolute", top: 0, left: 0,
-                width: "100%", height: "125%", objectFit: "cover", objectPosition: "top",
-                transform: isHovered ? "translateY(-20%)" : "translateY(0)",
+                position: "absolute", inset: 0,
+                width: "100%",
+                height: site.logoOnly ? "100%" : "125%",
+                objectFit: site.logoOnly ? "contain" : "cover",
+                objectPosition: "top",
+                transform: !site.logoOnly && isHovered ? "translateY(-20%)" : "translateY(0)",
                 transition: isHovered
                   ? "transform 4s cubic-bezier(0.25, 0.1, 0.25, 1)"
                   : "transform 0.6s ease-out",

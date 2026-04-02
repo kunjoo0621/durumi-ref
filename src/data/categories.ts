@@ -4,6 +4,7 @@ export interface Site {
   desc: string;
   tags: string[];
   addedAt?: string; // ISO date, e.g. "2026-04-01"
+  logoOnly?: boolean; // thumbnail is logo+bg, not a screenshot
 }
 
 // Sites added within this many days get a NEW badge
@@ -82,7 +83,7 @@ export const categories: Category[] = [
     sites: [
       { name: "ChatGPT", url: "chatgpt.com", desc: "OpenAI의 대화형 AI", tags: ["대화", "OpenAI"], addedAt: "2026-04-01" },
       { name: "Claude", url: "claude.ai", desc: "Anthropic의 AI 어시스턴트", tags: ["대화", "Anthropic"], addedAt: "2026-04-01" },
-      { name: "Midjourney", url: "midjourney.com", desc: "AI 이미지 생성 도구", tags: ["이미지", "생성"], addedAt: "2026-04-01" },
+      { name: "Midjourney", url: "midjourney.com", desc: "AI 이미지 생성 도구", tags: ["이미지", "생성"], addedAt: "2026-04-01", logoOnly: true },
       { name: "Galileo AI", url: "galileo.ai", desc: "AI 기반 UI 디자인 생성", tags: ["UI", "디자인"], addedAt: "2026-04-01" },
       { name: "v0", url: "v0.dev", desc: "AI 기반 UI 코드 생성", tags: ["UI", "코드"], addedAt: "2026-04-01" },
       { name: "Cursor", url: "cursor.com", desc: "AI 코딩 에디터", tags: ["코딩", "에디터"], addedAt: "2026-04-01" },
@@ -101,7 +102,7 @@ export const categories: Category[] = [
     sites: [
       { name: "Unsplash", url: "unsplash.com", desc: "고퀄리티 무료 사진", tags: ["사진", "무료"] },
       { name: "Pexels", url: "pexels.com", desc: "무료 사진·영상 스톡", tags: ["사진", "영상"] },
-      { name: "Freepik", url: "freepik.com", desc: "벡터·사진·PSD 종합 에셋", tags: ["벡터", "종합"] },
+      { name: "Freepik", url: "freepik.com", desc: "벡터·사진·PSD 종합 에셋", tags: ["벡터", "종합"], logoOnly: true },
       { name: "unDraw", url: "undraw.co", desc: "컬러 커스터마이징 오픈소스 일러스트", tags: ["일러스트", "오픈소스"] },
       { name: "Coolshapes", url: "coolshap.es", desc: "추상 그라디언트 도형 에셋", tags: ["도형", "그라디언트"] },
       { name: "Shapes Gallery", url: "shapes.gallery", desc: "일러스트 스타일 SVG 도형", tags: ["도형", "SVG"] },

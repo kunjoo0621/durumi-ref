@@ -49,6 +49,7 @@ export const categories: Category[] = [
       { name: "Minimal Gallery", url: "minimal.gallery", desc: "미니멀 웹 디자인 갤러리", tags: ["해외", "미니멀"] },
       { name: "Appshots", url: "appshots.design", desc: "해외 모바일 화면 모음", tags: ["해외", "모바일"] },
       { name: "DB컷", url: "dbcut.com", desc: "국내 웹 사이트 스크린샷 모음", tags: ["국내", "웹"] },
+      { name: "Scrnshts", url: "scrnshts.club", desc: "고퀄리티 UI/UX 레퍼런스 아카이브", tags: ["해외", "UI/UX"], addedAt: "2026-04-04" },
     ],
   },
   {
@@ -108,6 +109,7 @@ export const categories: Category[] = [
       { name: "Shapes Gallery", url: "shapes.gallery", desc: "일러스트 스타일 SVG 도형", tags: ["도형", "SVG"] },
       { name: "Spectrum", url: "spectrums.framer.website", desc: "기본 도형 벡터 리소스", tags: ["도형", "벡터"] },
       { name: "Handy Arrows", url: "handyarrows.com", desc: "프레젠테이션용 화살표·밑줄", tags: ["화살표", "프레젠테이션"] },
+      { name: "Framer Updates", url: "framer.com/updates", desc: "트렌디한 폰트·디자인 소스", tags: ["폰트", "소스"], addedAt: "2026-04-04" },
     ],
   },
   {
@@ -152,6 +154,8 @@ export const categories: Category[] = [
       { name: "Siteinspire", url: "siteinspire.com", desc: "웹 디자인 영감", tags: ["웹", "큐레이션"] },
       { name: "Savee", url: "savee.com", desc: "비주얼 북마크 플랫폼", tags: ["북마크", "비주얼"] },
       { name: "Mindsparkle Mag", url: "mindsparklemag.com", desc: "프리미엄 디자인 매거진", tags: ["매거진", "프리미엄"] },
+      { name: "Framer Gallery", url: "framer.com/gallery", desc: "요즘 감성 웹사이트 레퍼런스", tags: ["웹", "Framer"], addedAt: "2026-04-04" },
+      { name: "Curated Supply", url: "curated.supply", desc: "고급스러운 제품 디자인 사례", tags: ["제품", "큐레이션"], addedAt: "2026-04-04" },
     ],
   },
 ];

@@ -2,11 +2,11 @@
 
 import { useState } from "react";
 import { trends, CATEGORY_LABELS, CATEGORY_COLORS, type TrendItem as TrendItemType, type TrendArticle } from "@/data/trends";
-import { List, X } from "@phosphor-icons/react";
+import { List, X, CaretDown } from "@phosphor-icons/react";
 import CustomCursor from "@/components/CustomCursor";
 import SubmitModal from "@/components/SubmitModal";
 
-/* ─── Article Card (surfit style) ─── */
+/* ─── Article Card (surfit style with OG image) ─── */
 function ArticleCard({ article }: { article: TrendArticle }) {
   const domain = article.url.replace(/https?:\/\//, "").split("/")[0].replace("www.", "");
 
@@ -17,8 +17,8 @@ function ArticleCard({ article }: { article: TrendArticle }) {
       rel="noopener noreferrer"
       className="trend-card block shrink-0"
       style={{
-        width: 240,
-        borderRadius: 14,
+        width: 220,
+        borderRadius: 12,
         background: "var(--color-gray-5)",
         border: "1px solid var(--glass-border)",
         overflow: "hidden",
@@ -26,142 +26,138 @@ function ArticleCard({ article }: { article: TrendArticle }) {
         color: "inherit",
       }}
     >
-      {/* Favicon + source name */}
-      <div className="flex items-center gap-2" style={{ padding: "12px 14px 8px" }}>
-        <span className="inline-flex shrink-0 items-center justify-center rounded-[3px] bg-white" style={{ width: 16, height: 16, padding: 1 }}>
+      {/* OG Image */}
+      {article.ogImage && (
+        <div style={{ aspectRatio: "16/9", overflow: "hidden", background: "var(--color-gray-4)" }}>
           {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img
-            src={`https://www.google.com/s2/favicons?domain=${domain}&sz=32`}
-            alt="" width={14} height={14} className="rounded-[2px]"
-            onError={(e) => { (e.target as HTMLImageElement).parentElement!.style.display = "none"; }}
-          />
-        </span>
-        <span style={{ fontSize: 11, color: "var(--color-label-3)", fontWeight: 500 }}>
-          {article.name}
-        </span>
-      </div>
-      {/* Title */}
-      <div style={{
-        padding: "0 14px 14px",
-        fontSize: 13, fontWeight: 600, color: "var(--color-label)",
-        lineHeight: 1.5, letterSpacing: -0.1,
-        display: "-webkit-box", WebkitLineClamp: 2, WebkitBoxOrient: "vertical" as const,
-        overflow: "hidden",
-      }}>
-        {article.title}
+          <img src={article.ogImage} alt="" loading="lazy"
+            style={{ width: "100%", height: "100%", objectFit: "cover" }} />
+        </div>
+      )}
+      <div style={{ padding: "10px 12px 12px" }}>
+        <div className="mb-1.5 flex items-center gap-1.5">
+          <span className="inline-flex shrink-0 items-center justify-center rounded-[2px] bg-white" style={{ width: 14, height: 14, padding: 1 }}>
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img src={`https://www.google.com/s2/favicons?domain=${domain}&sz=32`}
+              alt="" width={12} height={12} className="rounded-[1px]"
+              onError={(e) => { (e.target as HTMLImageElement).parentElement!.style.display = "none"; }} />
+          </span>
+          <span style={{ fontSize: 10, color: "var(--color-label-3)", fontWeight: 500 }}>{article.name}</span>
+        </div>
+        <div style={{
+          fontSize: 12, fontWeight: 600, color: "var(--color-label)",
+          lineHeight: 1.5, display: "-webkit-box",
+          WebkitLineClamp: 2, WebkitBoxOrient: "vertical" as const, overflow: "hidden",
+        }}>
+          {article.title}
+        </div>
       </div>
     </a>
   );
 }
 
-/* ─── Single Trend Item ─── */
-function TrendItem({ item }: { item: TrendItemType }) {
+/* ─── Trend Item with expandable detail ─── */
+function TrendItemCard({ item }: { item: TrendItemType }) {
+  const [expanded, setExpanded] = useState(false);
   const color = CATEGORY_COLORS[item.category];
   const label = CATEGORY_LABELS[item.category];
-  const link = item.articles.length > 0 ? item.articles[0].url : undefined;
 
   return (
-    <>
-    <a
-      href={link}
-      target="_blank"
-      rel="noopener noreferrer"
-      className="trend-card group block"
-      style={{ textDecoration: "none", color: "inherit" }}
-    >
-      {/* OG Image — full width, big */}
-      {item.ogImage && (
-        <div style={{
-          borderRadius: 14, overflow: "hidden",
-          aspectRatio: "2.2/1", position: "relative",
-          background: "var(--color-gray-5)", marginBottom: 20,
-        }}>
-          {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img
-            src={item.ogImage}
-            alt={item.title}
-            loading="lazy"
-            style={{
-              width: "100%", height: "100%", objectFit: "cover",
-              transition: "transform 0.4s var(--ease-smooth)",
-            }}
-            className="group-hover:scale-[1.03]"
-          />
-        </div>
-      )}
-
-      {/* Category pill */}
-      <div className="mb-3 flex items-center gap-2">
-        <span style={{
-          padding: "4px 10px", borderRadius: 999,
-          fontSize: 11, fontWeight: 600, letterSpacing: 0.3,
-          background: `${color}12`, color: color,
-        }}>
-          {label}
-        </span>
-        {item.articles.length > 0 && (
-          <span style={{ fontSize: 11, color: "var(--color-label-3)" }}>
-            {item.articles[0].name}
-          </span>
-        )}
+    <div style={{ paddingBottom: 32 }}>
+      {/* Category */}
+      <div className="mb-2 flex items-center gap-2">
+        <div style={{ width: 6, height: 6, borderRadius: "50%", background: color }} />
+        <span style={{ fontSize: 11, fontWeight: 600, color: color, letterSpacing: 0.3 }}>{label}</span>
       </div>
 
       {/* Title */}
       <h3 style={{
-        fontSize: 20, fontWeight: 700,
-        color: "var(--color-label)",
-        lineHeight: 1.45, marginBottom: 10, letterSpacing: -0.3,
+        fontSize: 19, fontWeight: 700, color: "var(--color-label)",
+        lineHeight: 1.45, marginBottom: 8, letterSpacing: -0.3,
       }}>
         {item.title}
       </h3>
 
-      {/* Summary */}
+      {/* Summary (always visible) */}
       <p style={{
         fontSize: 15, color: "var(--color-label-2)",
-        lineHeight: 1.8, marginBottom: 16, wordBreak: "keep-all",
+        lineHeight: 1.8, marginBottom: 0, wordBreak: "keep-all",
       }}>
         {item.summary}
       </p>
 
+      {/* Detail (expandable) */}
+      {item.detail && (
+        <>
+          {expanded && (
+            <p style={{
+              fontSize: 15, color: "var(--color-label-2)",
+              lineHeight: 1.8, marginTop: 8, marginBottom: 0, wordBreak: "keep-all",
+              animation: "fade-up 0.2s ease",
+            }}>
+              {item.detail}
+            </p>
+          )}
+          <button
+            onClick={() => setExpanded(!expanded)}
+            className="mobile-nav-link mt-2 flex items-center gap-1 border-none"
+            style={{
+              background: "transparent", cursor: "pointer", fontFamily: "inherit",
+              fontSize: 13, fontWeight: 500, color: "var(--color-label-3)",
+              padding: "4px 0",
+            }}
+          >
+            {expanded ? "접기" : "더보기"}
+            <CaretDown size={12} weight="bold" style={{
+              transform: expanded ? "rotate(180deg)" : "rotate(0)",
+              transition: "transform 0.2s",
+            }} />
+          </button>
+        </>
+      )}
+
       {/* Action */}
       <div style={{
         fontSize: 14, color: color, fontWeight: 500,
-        lineHeight: 1.6, padding: "12px 0",
-        borderTop: `1px solid ${color}15`,
+        lineHeight: 1.6, marginTop: 12, padding: "10px 0",
+        borderTop: `1px solid ${color}12`,
       }}>
         → {item.action}
       </div>
-    </a>
 
-    {/* Related articles — surfit style cards */}
-    {item.articles.length > 0 && (
-      <div style={{ marginTop: 16 }}>
-        <span style={{ fontSize: 12, fontWeight: 600, color: "var(--color-label-3)", marginBottom: 10, display: "block" }}>
-          관련 아티클
-        </span>
-        <div className="flex gap-3 overflow-x-auto hide-scrollbar" style={{ paddingBottom: 4 }}>
-          {item.articles.map((article) => (
-            <ArticleCard key={article.url} article={article} />
-          ))}
+      {/* Related articles */}
+      {item.articles.length > 0 && (
+        <div style={{ marginTop: 8 }}>
+          <span style={{ fontSize: 11, fontWeight: 600, color: "var(--color-label-3)", marginBottom: 8, display: "block" }}>
+            관련 아티클
+          </span>
+          <div className="flex gap-3 overflow-x-auto hide-scrollbar" style={{ paddingBottom: 4 }}>
+            {item.articles.map((article) => (
+              <ArticleCard key={article.url} article={article} />
+            ))}
+          </div>
         </div>
-      </div>
-    )}
-    </>
+      )}
+    </div>
   );
 }
 
-/* ─── Week Section ─── */
+/* ─── Week Section (grouped) ─── */
 function WeekSection({ week, isLatest, index }: { week: typeof trends[0]; isLatest: boolean; index: number }) {
   const dateObj = new Date(week.date);
 
   return (
     <section style={{
+      borderRadius: 20,
+      background: "var(--color-gray-6)",
+      border: "1px solid var(--glass-border)",
+      overflow: "hidden",
       animation: "fade-up 0.5s cubic-bezier(.16,1,.3,1) backwards",
       animationDelay: `${index * 100}ms`,
     }}>
-      {/* Week header — Linear style: left date, right title */}
-      <div className="mb-10 flex flex-col gap-3 sm:flex-row sm:items-baseline sm:gap-8">
-        <div className="flex items-center gap-3 shrink-0">
+      {/* Week header */}
+      <div style={{ padding: "28px 28px 0" }}>
+        <div className="mb-2 flex items-center gap-3">
           <span style={{
             fontSize: 14, fontWeight: 700,
             color: isLatest ? "#0A84FF" : "var(--color-label-3)",
@@ -173,24 +169,32 @@ function WeekSection({ week, isLatest, index }: { week: typeof trends[0]; isLate
               padding: "3px 8px", borderRadius: 999,
               fontSize: 10, fontWeight: 700, letterSpacing: 0.5,
               background: "rgba(10,132,255,0.12)", color: "#0A84FF",
-            }}>
-              NEW
-            </span>
+            }}>NEW</span>
           )}
         </div>
         <h2 style={{
-          fontSize: 28, fontWeight: 800,
-          color: "var(--color-label)",
-          margin: 0, letterSpacing: -0.8, lineHeight: 1.3,
+          fontSize: 22, fontWeight: 800, color: "var(--color-label)",
+          margin: 0, letterSpacing: -0.5, lineHeight: 1.35,
         }}>
           {week.title}
         </h2>
+        <span style={{
+          fontSize: 12, color: "var(--color-label-3)",
+          marginTop: 8, display: "flex", alignItems: "center", gap: 6,
+        }}>
+          {week.readTime} 읽기
+          <span style={{ width: 3, height: 3, borderRadius: "50%", background: "var(--color-gray-3)" }} />
+          {week.items.length}개 토픽
+        </span>
       </div>
 
-      {/* Items — vertical feed */}
-      <div className="flex flex-col gap-12">
+      {/* Divider */}
+      <div style={{ height: 1, background: "var(--glass-border)", margin: "24px 28px 0" }} />
+
+      {/* Items */}
+      <div style={{ padding: "24px 28px 4px" }}>
         {week.items.map((item) => (
-          <TrendItem key={item.title} item={item} />
+          <TrendItemCard key={item.title} item={item} />
         ))}
       </div>
     </section>
@@ -204,17 +208,12 @@ export default function TrendsPage() {
 
   return (
     <div style={{
-      minHeight: "100dvh",
-      background: "var(--color-bg)",
-      color: "var(--color-label)",
-      overflow: "auto",
-      position: "fixed",
-      inset: 0,
+      minHeight: "100dvh", background: "var(--color-bg)", color: "var(--color-label)",
+      overflow: "auto", position: "fixed", inset: 0,
     }}>
       <CustomCursor color="#0A84FF" />
       <SubmitModal open={submitOpen} onClose={() => setSubmitOpen(false)} />
 
-      {/* Ambient glow */}
       <div className="pointer-events-none fixed inset-x-0 top-0 -z-10" style={{
         height: "50%",
         background: "radial-gradient(ellipse 80% 50% at 50% 0%, rgba(10,132,255,0.06) 0%, transparent 70%)",
@@ -222,9 +221,7 @@ export default function TrendsPage() {
 
       {/* ─── Header ─── */}
       <header className="safe-top sticky top-0 z-10 grid grid-cols-[1fr_auto_1fr] items-center px-5 py-3 sm:px-8 sm:py-4" style={{
-        background: "rgba(0,0,0,0.6)",
-        backdropFilter: "blur(20px) saturate(180%)",
-        WebkitBackdropFilter: "blur(20px) saturate(180%)",
+        background: "rgba(0,0,0,0.6)", backdropFilter: "blur(20px) saturate(180%)", WebkitBackdropFilter: "blur(20px) saturate(180%)",
       }}>
         <a href="/" className="flex items-center gap-2 justify-self-start" style={{ textDecoration: "none" }}>
           <img src="/logo.svg" alt="Durumi Ref" width={28} height={28} className="rounded-md sm:size-8" />
@@ -301,32 +298,20 @@ export default function TrendsPage() {
       )}
 
       {/* ─── Content ─── */}
-      <div style={{ maxWidth: 680, margin: "0 auto", padding: "48px 24px 160px" }}>
-        {/* Hero intro */}
-        <div style={{ marginBottom: 72 }}>
-          <p style={{
-            fontSize: 14, fontWeight: 600, color: "#0A84FF",
-            letterSpacing: 0.5, marginBottom: 12,
-          }}>
+      <div style={{ maxWidth: 680, margin: "0 auto", padding: "48px 20px 160px" }}>
+        <div style={{ marginBottom: 56 }}>
+          <p style={{ fontSize: 13, fontWeight: 600, color: "#0A84FF", letterSpacing: 0.5, marginBottom: 12 }}>
             WEEKLY DIGEST
           </p>
-          <h1 style={{
-            fontSize: 36, fontWeight: 800,
-            letterSpacing: -1, lineHeight: 1.2, marginBottom: 16,
-          }}>
+          <h1 style={{ fontSize: 32, fontWeight: 800, letterSpacing: -0.8, lineHeight: 1.2, marginBottom: 12 }}>
             디자이너를 위한<br />AI 트렌드
           </h1>
-          <p style={{
-            fontSize: 16, color: "var(--color-label-3)",
-            lineHeight: 1.7, maxWidth: 440,
-          }}>
-            매주 AI와 디자인의 변화를 정리합니다.
-            놓치면 안 되는 것만, 디자이너 관점으로.
+          <p style={{ fontSize: 15, color: "var(--color-label-3)", lineHeight: 1.7, maxWidth: 440 }}>
+            매주 AI와 디자인의 변화를 정리합니다.<br />놓치면 안 되는 것만, 디자이너 관점으로.
           </p>
         </div>
 
-        {/* Weekly sections */}
-        <div className="flex flex-col" style={{ gap: 80 }}>
+        <div className="flex flex-col" style={{ gap: 32 }}>
           {trends.map((week, i) => (
             <WeekSection key={week.date} week={week} isLatest={i === 0} index={i} />
           ))}

@@ -641,9 +641,9 @@ export default function ReferenceHub() {
       }} />
 
       {/* ─── Header ─── */}
-      <header className="safe-top absolute inset-x-0 top-0 z-10 flex items-center justify-between px-5 pt-3 sm:px-8 sm:pt-5">
+      <header className="safe-top absolute inset-x-0 top-0 z-10 grid grid-cols-[1fr_auto_1fr] items-center px-5 pt-3 sm:px-8 sm:pt-5">
         {/* Logo */}
-        <a href="/" className="flex items-center gap-2" style={{ textDecoration: "none" }}>
+        <a href="/" className="flex items-center gap-2 justify-self-start" style={{ textDecoration: "none" }}>
           <svg width={28} height={28} viewBox="0 0 400 400" fill="none" className="rounded-md sm:size-8" style={{ transition: "background 0.5s ease" }}>
             <rect width="400" height="400" rx="20" fill={activeCat.color} style={{ transition: "fill 0.5s ease" }} />
             <g clipPath="url(#logo-clip)">
@@ -664,7 +664,7 @@ export default function ReferenceHub() {
         </a>
 
         {/* Center nav (PC only) */}
-        <nav className="absolute inset-x-0 top-0 bottom-0 hidden items-center justify-center sm:flex">
+        <nav className="hidden items-center justify-center sm:flex">
           <div className="flex items-center gap-1" style={{
             padding: "4px",
             background: "var(--glass-bg)",
@@ -699,7 +699,7 @@ export default function ReferenceHub() {
         </nav>
 
         {/* Right controls */}
-        <div className="flex items-center gap-2 sm:gap-3">
+        <div className="flex items-center justify-self-end gap-2 sm:gap-3">
           {/* View toggle pill (Ref page only) */}
           <div className="hidden items-center sm:flex" style={{
             padding: "4px",

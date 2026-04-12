@@ -739,7 +739,7 @@ export default function ReferenceHub() {
           <button
             onClick={() => setMobileNavOpen(true)}
             aria-label="메뉴"
-            className="flex size-9 items-center justify-center border-none sm:hidden"
+            className="header-btn flex min-h-[44px] min-w-[44px] items-center justify-center border-none sm:hidden"
             style={{ background: "transparent", cursor: "pointer" }}
           >
             <List size={22} weight="bold" color="var(--color-label)" />
@@ -819,6 +819,7 @@ export default function ReferenceHub() {
                 key={item.label}
                 href={item.href}
                 onClick={() => setMobileNavOpen(false)}
+                className="mobile-nav-link"
                 style={{
                   fontSize: 24,
                   fontWeight: item.active ? 700 : 500,
@@ -839,6 +840,7 @@ export default function ReferenceHub() {
             {/* Submit */}
             <button
               onClick={() => { setMobileNavOpen(false); setSubmitOpen(true); }}
+              className="mobile-nav-link"
               style={{
                 fontSize: 18,
                 fontWeight: 500,

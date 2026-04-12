@@ -23,46 +23,51 @@ function TrendItemCard({ item, index, total }: { item: TrendItem; index: number;
         animationDelay: `${index * 80}ms`,
       }}
     >
-      {/* OG Image */}
-      {item.ogImage && (
-        <div style={{
-          marginBottom: 16, borderRadius: 12, overflow: "hidden",
-          aspectRatio: "2/1", position: "relative", background: "var(--color-gray-6)",
-        }}>
-          {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img
-            src={item.ogImage}
-            alt={item.title}
-            loading="lazy"
-            style={{ width: "100%", height: "100%", objectFit: "cover" }}
-          />
+      <div className="flex gap-4">
+        {/* Left: text */}
+        <div style={{ flex: 1, minWidth: 0 }}>
+          {/* Category */}
+          <div className="mb-3 flex items-center gap-2">
+            <div style={{ width: 6, height: 6, borderRadius: "50%", background: color }} />
+            <span style={{ fontSize: 11, fontWeight: 600, color: color, letterSpacing: 0.3 }}>
+              {label}
+            </span>
+          </div>
+
+          {/* Title */}
+          <h3 style={{
+            fontSize: 17, fontWeight: 700,
+            color: "var(--color-label)",
+            lineHeight: 1.5, marginBottom: 10, letterSpacing: -0.2,
+          }}>
+            {item.title}
+          </h3>
+
+          {/* Summary */}
+          <p style={{
+            fontSize: 14, color: "var(--color-label-2)",
+            lineHeight: 1.8, marginBottom: 0, wordBreak: "keep-all",
+          }}>
+            {item.summary}
+          </p>
         </div>
-      )}
 
-      {/* Category */}
-      <div className="mb-3 flex items-center gap-2">
-        <div style={{ width: 6, height: 6, borderRadius: "50%", background: color }} />
-        <span style={{ fontSize: 11, fontWeight: 600, color: color, letterSpacing: 0.3 }}>
-          {label}
-        </span>
+        {/* Right: OG Image */}
+        {item.ogImage && (
+          <div className="hidden shrink-0 sm:block" style={{
+            width: 160, height: 100, borderRadius: 10, overflow: "hidden",
+            background: "var(--color-gray-6)", marginTop: 24,
+          }}>
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img
+              src={item.ogImage}
+              alt={item.title}
+              loading="lazy"
+              style={{ width: "100%", height: "100%", objectFit: "cover" }}
+            />
+          </div>
+        )}
       </div>
-
-      {/* Title */}
-      <h3 style={{
-        fontSize: 17, fontWeight: 700,
-        color: "var(--color-label)",
-        lineHeight: 1.5, marginBottom: 10, letterSpacing: -0.2,
-      }}>
-        {item.title}
-      </h3>
-
-      {/* Summary */}
-      <p style={{
-        fontSize: 14, color: "var(--color-label-2)",
-        lineHeight: 1.8, marginBottom: 0, wordBreak: "keep-all",
-      }}>
-        {item.summary}
-      </p>
 
       {/* Action */}
       <p style={{

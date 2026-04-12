@@ -1,176 +1,198 @@
 "use client";
 
 import { useState } from "react";
-import { trends, CATEGORY_LABELS, CATEGORY_COLORS, type TrendItem } from "@/data/trends";
-import { CaretDown, List, X } from "@phosphor-icons/react";
+import { trends, CATEGORY_LABELS, CATEGORY_COLORS, type TrendItem as TrendItemType, type TrendArticle } from "@/data/trends";
+import { List, X } from "@phosphor-icons/react";
 import CustomCursor from "@/components/CustomCursor";
 import SubmitModal from "@/components/SubmitModal";
 
-/* ─── Trend Item ─── */
-function TrendItemCard({ item, index, total }: { item: TrendItem; index: number; total: number }) {
-  const color = CATEGORY_COLORS[item.category];
-  const label = CATEGORY_LABELS[item.category];
-  const isLast = index === total - 1;
+/* ─── Article Card (surfit style) ─── */
+function ArticleCard({ article }: { article: TrendArticle }) {
+  const domain = article.url.replace(/https?:\/\//, "").split("/")[0].replace("www.", "");
 
   return (
     <a
-      href={item.sources.length > 0 ? item.sources[0].url : "#"}
+      href={article.url}
       target="_blank"
       rel="noopener noreferrer"
-      className="trend-card block"
+      className="trend-card block shrink-0"
       style={{
-        paddingBottom: isLast ? 0 : 28,
-        marginBottom: isLast ? 0 : 28,
-        borderBottom: isLast ? "none" : "1px solid var(--glass-border)",
-        animation: "fade-up 0.4s cubic-bezier(.16,1,.3,1) backwards",
-        animationDelay: `${index * 80}ms`,
-        textDecoration: "none", color: "inherit",
+        width: 240,
+        borderRadius: 14,
+        background: "var(--color-gray-5)",
+        border: "1px solid var(--glass-border)",
+        overflow: "hidden",
+        textDecoration: "none",
+        color: "inherit",
       }}
     >
-      <div className="flex gap-4">
-        <div style={{ flex: 1, minWidth: 0 }}>
-          <div className="mb-3 flex items-center gap-2">
-            <div style={{ width: 6, height: 6, borderRadius: "50%", background: color }} />
-            <span style={{ fontSize: 11, fontWeight: 600, color: color, letterSpacing: 0.3 }}>
-              {label}
-            </span>
-          </div>
-
-          <h3 style={{
-            fontSize: 17, fontWeight: 700,
-            color: "var(--color-label)",
-            lineHeight: 1.5, marginBottom: 10, letterSpacing: -0.2,
-          }}>
-            {item.title}
-          </h3>
-
-          <p style={{
-            fontSize: 14, color: "var(--color-label-2)",
-            lineHeight: 1.8, marginBottom: 0, wordBreak: "keep-all",
-          }}>
-            {item.summary}
-          </p>
-        </div>
-
-        {item.ogImage && (
-          <div className="hidden shrink-0 sm:block" style={{
-            width: 160, height: 100, borderRadius: 10, overflow: "hidden",
-            background: "var(--color-gray-6)", marginTop: 24,
-          }}>
-            {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img
-              src={item.ogImage}
-              alt={item.title}
-              loading="lazy"
-              style={{ width: "100%", height: "100%", objectFit: "cover" }}
-            />
-          </div>
-        )}
+      {/* Favicon + source name */}
+      <div className="flex items-center gap-2" style={{ padding: "12px 14px 8px" }}>
+        <span className="inline-flex shrink-0 items-center justify-center rounded-[3px] bg-white" style={{ width: 16, height: 16, padding: 1 }}>
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img
+            src={`https://www.google.com/s2/favicons?domain=${domain}&sz=32`}
+            alt="" width={14} height={14} className="rounded-[2px]"
+            onError={(e) => { (e.target as HTMLImageElement).parentElement!.style.display = "none"; }}
+          />
+        </span>
+        <span style={{ fontSize: 11, color: "var(--color-label-3)", fontWeight: 500 }}>
+          {article.name}
+        </span>
       </div>
-
-      <p style={{
-        fontSize: 13, color: color,
-        lineHeight: 1.7, marginTop: 12, marginBottom: 0, fontWeight: 500,
+      {/* Title */}
+      <div style={{
+        padding: "0 14px 14px",
+        fontSize: 13, fontWeight: 600, color: "var(--color-label)",
+        lineHeight: 1.5, letterSpacing: -0.1,
+        display: "-webkit-box", WebkitLineClamp: 2, WebkitBoxOrient: "vertical" as const,
+        overflow: "hidden",
       }}>
-        → {item.action}
-      </p>
-
-      {item.sources.length > 0 && (
-        <div style={{ marginTop: 14, display: "flex", alignItems: "center", gap: 4, flexWrap: "wrap" }}>
-          <span style={{ fontSize: 11, color: "var(--color-label-3)" }}>출처</span>
-          {item.sources.map((s, i) => (
-            <span key={s.url} className="flex items-center">
-              {i > 0 && <span style={{ fontSize: 11, color: "var(--color-gray-3)", margin: "0 2px" }}>·</span>}
-              <span style={{ fontSize: 11, color: "var(--color-label-3)", padding: "2px 4px" }}>
-                {s.name}
-              </span>
-            </span>
-          ))}
-        </div>
-      )}
+        {article.title}
+      </div>
     </a>
   );
 }
 
+/* ─── Single Trend Item ─── */
+function TrendItem({ item }: { item: TrendItemType }) {
+  const color = CATEGORY_COLORS[item.category];
+  const label = CATEGORY_LABELS[item.category];
+  const link = item.articles.length > 0 ? item.articles[0].url : undefined;
+
+  return (
+    <>
+    <a
+      href={link}
+      target="_blank"
+      rel="noopener noreferrer"
+      className="trend-card group block"
+      style={{ textDecoration: "none", color: "inherit" }}
+    >
+      {/* OG Image — full width, big */}
+      {item.ogImage && (
+        <div style={{
+          borderRadius: 14, overflow: "hidden",
+          aspectRatio: "2.2/1", position: "relative",
+          background: "var(--color-gray-5)", marginBottom: 20,
+        }}>
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img
+            src={item.ogImage}
+            alt={item.title}
+            loading="lazy"
+            style={{
+              width: "100%", height: "100%", objectFit: "cover",
+              transition: "transform 0.4s var(--ease-smooth)",
+            }}
+            className="group-hover:scale-[1.03]"
+          />
+        </div>
+      )}
+
+      {/* Category pill */}
+      <div className="mb-3 flex items-center gap-2">
+        <span style={{
+          padding: "4px 10px", borderRadius: 999,
+          fontSize: 11, fontWeight: 600, letterSpacing: 0.3,
+          background: `${color}12`, color: color,
+        }}>
+          {label}
+        </span>
+        {item.articles.length > 0 && (
+          <span style={{ fontSize: 11, color: "var(--color-label-3)" }}>
+            {item.articles[0].name}
+          </span>
+        )}
+      </div>
+
+      {/* Title */}
+      <h3 style={{
+        fontSize: 20, fontWeight: 700,
+        color: "var(--color-label)",
+        lineHeight: 1.45, marginBottom: 10, letterSpacing: -0.3,
+      }}>
+        {item.title}
+      </h3>
+
+      {/* Summary */}
+      <p style={{
+        fontSize: 15, color: "var(--color-label-2)",
+        lineHeight: 1.8, marginBottom: 16, wordBreak: "keep-all",
+      }}>
+        {item.summary}
+      </p>
+
+      {/* Action */}
+      <div style={{
+        fontSize: 14, color: color, fontWeight: 500,
+        lineHeight: 1.6, padding: "12px 0",
+        borderTop: `1px solid ${color}15`,
+      }}>
+        → {item.action}
+      </div>
+    </a>
+
+    {/* Related articles — surfit style cards */}
+    {item.articles.length > 0 && (
+      <div style={{ marginTop: 16 }}>
+        <span style={{ fontSize: 12, fontWeight: 600, color: "var(--color-label-3)", marginBottom: 10, display: "block" }}>
+          관련 아티클
+        </span>
+        <div className="flex gap-3 overflow-x-auto hide-scrollbar" style={{ paddingBottom: 4 }}>
+          {item.articles.map((article) => (
+            <ArticleCard key={article.url} article={article} />
+          ))}
+        </div>
+      </div>
+    )}
+    </>
+  );
+}
+
 /* ─── Week Section ─── */
-function WeekSection({ week, isLatest }: { week: typeof trends[0]; isLatest: boolean }) {
-  const [expanded, setExpanded] = useState(isLatest);
+function WeekSection({ week, isLatest, index }: { week: typeof trends[0]; isLatest: boolean; index: number }) {
   const dateObj = new Date(week.date);
 
   return (
-    <section className="trend-card" style={{
-      marginBottom: 24,
-      borderRadius: 20,
-      background: "var(--color-gray-6)",
-      border: "1px solid var(--glass-border)",
-      overflow: "hidden",
+    <section style={{
+      animation: "fade-up 0.5s cubic-bezier(.16,1,.3,1) backwards",
+      animationDelay: `${index * 100}ms`,
     }}>
-      {/* Header */}
-      <button
-        onClick={() => setExpanded(!expanded)}
-        className="mobile-nav-link flex w-full items-center justify-between border-none"
-        style={{
-          padding: "24px 28px",
-          background: "transparent",
-          cursor: "pointer",
-          fontFamily: "inherit",
-          textAlign: "left",
-        }}
-      >
-        <div style={{ flex: 1, minWidth: 0 }}>
-          <div className="mb-2 flex items-center gap-2">
-            <span style={{
-              fontSize: 13, fontWeight: 700,
-              color: isLatest ? "#0A84FF" : "var(--color-label-3)",
-            }}>
-              {dateObj.getFullYear()}년 {dateObj.getMonth() + 1}월 {week.weekNumber}주
-            </span>
-            {isLatest && (
-              <span style={{
-                padding: "2px 8px", borderRadius: 999,
-                fontSize: 10, fontWeight: 600,
-                background: "rgba(10,132,255,0.15)", color: "#0A84FF",
-              }}>
-                NEW
-              </span>
-            )}
-          </div>
-          <h2 style={{
-            fontSize: 17,
-            fontWeight: 700,
-            color: "var(--color-label)",
-            margin: 0, letterSpacing: -0.3, lineHeight: 1.45,
-          }}>
-            {week.title}
-          </h2>
+      {/* Week header — Linear style: left date, right title */}
+      <div className="mb-10 flex flex-col gap-3 sm:flex-row sm:items-baseline sm:gap-8">
+        <div className="flex items-center gap-3 shrink-0">
           <span style={{
-            fontSize: 12, color: "var(--color-label-3)",
-            marginTop: 8, display: "flex", alignItems: "center", gap: 6,
+            fontSize: 14, fontWeight: 700,
+            color: isLatest ? "#0A84FF" : "var(--color-label-3)",
           }}>
-            {week.readTime} 읽기
-            <span style={{ width: 3, height: 3, borderRadius: "50%", background: "var(--color-gray-3)" }} />
-            {week.items.length}개 토픽
+            {dateObj.getFullYear()}년 {dateObj.getMonth() + 1}월 {week.weekNumber}주
           </span>
+          {isLatest && (
+            <span style={{
+              padding: "3px 8px", borderRadius: 999,
+              fontSize: 10, fontWeight: 700, letterSpacing: 0.5,
+              background: "rgba(10,132,255,0.12)", color: "#0A84FF",
+            }}>
+              NEW
+            </span>
+          )}
         </div>
-        <CaretDown
-          size={18} weight="bold" color="var(--color-label-3)"
-          style={{
-            transform: expanded ? "rotate(180deg)" : "rotate(0)",
-            transition: "transform 0.25s var(--ease-smooth)",
-            flexShrink: 0, marginLeft: 16,
-          }}
-        />
-      </button>
+        <h2 style={{
+          fontSize: 28, fontWeight: 800,
+          color: "var(--color-label)",
+          margin: 0, letterSpacing: -0.8, lineHeight: 1.3,
+        }}>
+          {week.title}
+        </h2>
+      </div>
 
-      {/* Items */}
-      {expanded && (
-        <div style={{ padding: "0 28px 28px" }}>
-          <div style={{ height: 1, background: "var(--glass-border)", marginBottom: 28 }} />
-          {week.items.map((item, i) => (
-            <TrendItemCard key={item.title} item={item} index={i} total={week.items.length} />
-          ))}
-        </div>
-      )}
+      {/* Items — vertical feed */}
+      <div className="flex flex-col gap-12">
+        {week.items.map((item) => (
+          <TrendItem key={item.title} item={item} />
+        ))}
+      </div>
     </section>
   );
 }
@@ -195,7 +217,7 @@ export default function TrendsPage() {
       {/* Ambient glow */}
       <div className="pointer-events-none fixed inset-x-0 top-0 -z-10" style={{
         height: "50%",
-        background: "radial-gradient(ellipse 80% 50% at 50% 0%, rgba(10,132,255,0.08) 0%, transparent 70%)",
+        background: "radial-gradient(ellipse 80% 50% at 50% 0%, rgba(10,132,255,0.06) 0%, transparent 70%)",
       }} />
 
       {/* ─── Header ─── */}
@@ -206,19 +228,12 @@ export default function TrendsPage() {
       }}>
         <a href="/" className="flex items-center gap-2 justify-self-start" style={{ textDecoration: "none" }}>
           <img src="/logo.svg" alt="Durumi Ref" width={28} height={28} className="rounded-md sm:size-8" />
-          <span className="hidden text-[15px] font-bold tracking-tight text-white sm:block sm:text-[17px]">
-            Durumi Ref
-          </span>
+          <span className="hidden text-[15px] font-bold tracking-tight text-white sm:block sm:text-[17px]">Durumi Ref</span>
         </a>
-
         <nav className="hidden items-center justify-center sm:flex">
           <div className="flex items-center gap-1" style={{
-            padding: "4px",
-            background: "var(--glass-bg)",
-            backdropFilter: "var(--glass-blur)",
-            WebkitBackdropFilter: "var(--glass-blur)",
-            borderRadius: 999,
-            border: "1px solid var(--glass-border)",
+            padding: "4px", background: "var(--glass-bg)", backdropFilter: "var(--glass-blur)", WebkitBackdropFilter: "var(--glass-blur)",
+            borderRadius: 999, border: "1px solid var(--glass-border)",
           }}>
             {[
               { label: "Ref", href: "/", active: false },
@@ -226,8 +241,8 @@ export default function TrendsPage() {
               { label: "Extract", href: "/extract", active: false },
             ].map((item) => (
               <a key={item.label} href={item.href} className="header-btn" style={{
-                padding: "6px 16px", borderRadius: 999,
-                fontSize: 13, fontWeight: item.active ? 600 : 400,
+                padding: "6px 16px", borderRadius: 999, fontSize: 13,
+                fontWeight: item.active ? 600 : 400,
                 color: item.active ? "var(--color-label)" : "var(--color-label-3)",
                 background: item.active ? "var(--color-gray-4)" : "transparent",
                 textDecoration: "none",
@@ -235,7 +250,6 @@ export default function TrendsPage() {
             ))}
           </div>
         </nav>
-
         <div className="flex items-center justify-self-end gap-2 sm:gap-3">
           <button onClick={() => setMobileNavOpen(true)} aria-label="메뉴"
             className="header-btn flex min-h-[44px] min-w-[44px] items-center justify-center border-none sm:hidden"
@@ -244,8 +258,7 @@ export default function TrendsPage() {
           </button>
           <div className="relative hidden sm:block">
             <button onClick={() => setSubmitOpen(true)} className="header-btn-submit shrink-0 border-none" style={{
-              padding: "8px 18px", borderRadius: 999,
-              background: "var(--color-label)", color: "var(--color-bg)",
+              padding: "8px 18px", borderRadius: 999, background: "var(--color-label)", color: "var(--color-bg)",
               fontSize: 13, fontWeight: 600, fontFamily: "inherit", cursor: "pointer",
             }}>제보</button>
           </div>
@@ -282,35 +295,42 @@ export default function TrendsPage() {
               fontSize: 18, fontWeight: 500, color: "var(--color-label-2)",
               padding: "12px 32px", borderRadius: 16, background: "transparent",
               border: "none", cursor: "pointer", fontFamily: "inherit",
-              animation: "fade-up 0.3s cubic-bezier(.16,1,.3,1) backwards", animationDelay: "200ms",
             }}>사이트 제보</button>
           </nav>
         </div>
       )}
 
       {/* ─── Content ─── */}
-      <div style={{ maxWidth: 640, margin: "0 auto", padding: "40px 20px 140px" }}>
-        {/* Page intro */}
-        <div style={{ marginBottom: 48 }}>
-          <h1 style={{
-            fontSize: 28, fontWeight: 800,
-            letterSpacing: -0.8, lineHeight: 1.3, marginBottom: 8,
+      <div style={{ maxWidth: 680, margin: "0 auto", padding: "48px 24px 160px" }}>
+        {/* Hero intro */}
+        <div style={{ marginBottom: 72 }}>
+          <p style={{
+            fontSize: 14, fontWeight: 600, color: "#0A84FF",
+            letterSpacing: 0.5, marginBottom: 12,
           }}>
-            Trends
+            WEEKLY DIGEST
+          </p>
+          <h1 style={{
+            fontSize: 36, fontWeight: 800,
+            letterSpacing: -1, lineHeight: 1.2, marginBottom: 16,
+          }}>
+            디자이너를 위한<br />AI 트렌드
           </h1>
           <p style={{
-            fontSize: 15, color: "var(--color-label-3)",
-            lineHeight: 1.7,
+            fontSize: 16, color: "var(--color-label-3)",
+            lineHeight: 1.7, maxWidth: 440,
           }}>
-            AI와 디자인의 변화를 매주 정리합니다.
-            <br />
-            디자이너가 놓치면 안 되는 것만 담았어요.
+            매주 AI와 디자인의 변화를 정리합니다.
+            놓치면 안 되는 것만, 디자이너 관점으로.
           </p>
         </div>
 
-        {trends.map((week, i) => (
-          <WeekSection key={week.date} week={week} isLatest={i === 0} />
-        ))}
+        {/* Weekly sections */}
+        <div className="flex flex-col" style={{ gap: 80 }}>
+          {trends.map((week, i) => (
+            <WeekSection key={week.date} week={week} isLatest={i === 0} index={i} />
+          ))}
+        </div>
       </div>
     </div>
   );

@@ -745,8 +745,8 @@ export default function ReferenceHub() {
             <List size={22} weight="bold" color="var(--color-label)" />
           </button>
 
-          {/* Submit pill + tooltip */}
-          <div className="relative">
+          {/* Submit pill + tooltip (PC only, mobile in hamburger) */}
+          <div className="relative hidden sm:block">
             <button
               onClick={() => setSubmitOpen(true)}
               className="header-btn-submit shrink-0 border-none"
@@ -834,6 +834,28 @@ export default function ReferenceHub() {
                 {item.label}
               </a>
             ))}
+            {/* Divider */}
+            <div style={{ width: 40, height: 1, background: "var(--color-gray-3)", opacity: 0.3, margin: "8px 0" }} />
+            {/* Submit */}
+            <button
+              onClick={() => { setMobileNavOpen(false); setSubmitOpen(true); }}
+              style={{
+                fontSize: 18,
+                fontWeight: 500,
+                color: "var(--color-label-2)",
+                textDecoration: "none",
+                padding: "12px 32px",
+                borderRadius: 16,
+                background: "transparent",
+                border: "none",
+                cursor: "pointer",
+                fontFamily: "inherit",
+                animation: "fade-up 0.3s cubic-bezier(.16,1,.3,1) backwards",
+                animationDelay: "200ms",
+              }}
+            >
+              사이트 제보
+            </button>
           </nav>
         </div>
       )}

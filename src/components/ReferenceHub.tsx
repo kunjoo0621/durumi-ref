@@ -17,6 +17,8 @@ import {
   GridFour,
   ArrowUpRight,
   Heart,
+  List,
+  X,
 } from "@phosphor-icons/react";
 import type { ComponentType } from "react";
 import CustomCursor from "./CustomCursor";
@@ -547,6 +549,7 @@ export default function ReferenceHub() {
   const [hoveredCard, setHoveredCard] = useState<number | null>(null);
   const [submitOpen, setSubmitOpen] = useState(false);
   const [tooltipVisible, setTooltipVisible] = useState(true);
+  const [mobileNavOpen, setMobileNavOpen] = useState(false);
   const { toggle: toggleBookmark, isBookmarked } = useBookmarks();
   const scrollRef = useRef<HTMLDivElement>(null);
   const isDragging = useRef(false);
@@ -637,10 +640,10 @@ export default function ReferenceHub() {
         animation: "glow-breathe 6s ease-in-out infinite",
       }} />
 
-      {/* ─── Header (floating, flat items) ─── */}
+      {/* ─── Header ─── */}
       <header className="safe-top absolute inset-x-0 top-0 z-10 flex items-center justify-between px-5 pt-3 sm:px-8 sm:pt-5">
         {/* Logo */}
-        <div className="flex items-center gap-2">
+        <a href="/" className="flex items-center gap-2" style={{ textDecoration: "none" }}>
           <svg width={28} height={28} viewBox="0 0 400 400" fill="none" className="rounded-md sm:size-8" style={{ transition: "background 0.5s ease" }}>
             <rect width="400" height="400" rx="20" fill={activeCat.color} style={{ transition: "fill 0.5s ease" }} />
             <g clipPath="url(#logo-clip)">
@@ -658,12 +661,47 @@ export default function ReferenceHub() {
           <span className="hidden text-[15px] font-bold tracking-tight text-white sm:block sm:text-[17px]">
             Durumi Ref
           </span>
-        </div>
+        </a>
+
+        {/* Center nav (PC only) */}
+        <nav className="absolute inset-x-0 top-0 bottom-0 hidden items-center justify-center sm:flex">
+          <div className="flex items-center gap-1" style={{
+            padding: "4px",
+            background: "var(--glass-bg)",
+            backdropFilter: "var(--glass-blur)",
+            WebkitBackdropFilter: "var(--glass-blur)",
+            borderRadius: 999,
+            border: "1px solid var(--glass-border)",
+          }}>
+            {[
+              { label: "Ref", href: "/", active: true },
+              { label: "Trends", href: "/trends", active: false },
+              { label: "Extract", href: "/extract", active: false },
+            ].map((item) => (
+              <a
+                key={item.label}
+                href={item.href}
+                className="header-btn"
+                style={{
+                  padding: "6px 16px",
+                  borderRadius: 999,
+                  fontSize: 13,
+                  fontWeight: item.active ? 600 : 400,
+                  color: item.active ? "var(--color-label)" : "var(--color-label-3)",
+                  background: item.active ? "var(--color-gray-4)" : "transparent",
+                  textDecoration: "none",
+                }}
+              >
+                {item.label}
+              </a>
+            ))}
+          </div>
+        </nav>
 
         {/* Right controls */}
         <div className="flex items-center gap-2 sm:gap-3">
-          {/* View toggle pill */}
-          <div className="flex items-center" style={{
+          {/* View toggle pill (Ref page only) */}
+          <div className="hidden items-center sm:flex" style={{
             padding: "4px",
             background: "var(--glass-bg)",
             backdropFilter: "var(--glass-blur)",
@@ -696,6 +734,16 @@ export default function ReferenceHub() {
               <ListViewIcon active={viewMode === "list"} color={activeCat.color} />
             </button>
           </div>
+
+          {/* Mobile hamburger */}
+          <button
+            onClick={() => setMobileNavOpen(true)}
+            aria-label="메뉴"
+            className="flex size-9 items-center justify-center border-none sm:hidden"
+            style={{ background: "transparent", cursor: "pointer" }}
+          >
+            <List size={22} weight="bold" color="var(--color-label)" />
+          </button>
 
           {/* Submit pill + tooltip */}
           <div className="relative">
@@ -742,6 +790,53 @@ export default function ReferenceHub() {
           </div>
         </div>
       </header>
+
+      {/* Mobile nav overlay */}
+      {mobileNavOpen && (
+        <div
+          className="fixed inset-0 z-50 flex flex-col items-center justify-center sm:hidden"
+          style={{
+            background: "rgba(0,0,0,0.9)",
+            backdropFilter: "blur(20px)",
+            WebkitBackdropFilter: "blur(20px)",
+          }}
+        >
+          <button
+            onClick={() => setMobileNavOpen(false)}
+            className="absolute right-5 top-5 flex size-10 items-center justify-center border-none"
+            style={{ background: "transparent", cursor: "pointer" }}
+            aria-label="닫기"
+          >
+            <X size={24} weight="bold" color="var(--color-label)" />
+          </button>
+          <nav className="flex flex-col items-center gap-3">
+            {[
+              { label: "Ref", href: "/", active: true },
+              { label: "Trends", href: "/trends", active: false },
+              { label: "Extract", href: "/extract", active: false },
+            ].map((item, i) => (
+              <a
+                key={item.label}
+                href={item.href}
+                onClick={() => setMobileNavOpen(false)}
+                style={{
+                  fontSize: 24,
+                  fontWeight: item.active ? 700 : 500,
+                  color: item.active ? "var(--color-label)" : "var(--color-label-2)",
+                  textDecoration: "none",
+                  padding: "12px 32px",
+                  borderRadius: 16,
+                  background: item.active ? "rgba(255,255,255,0.06)" : "transparent",
+                  animation: "fade-up 0.3s cubic-bezier(.16,1,.3,1) backwards",
+                  animationDelay: `${i * 50}ms`,
+                }}
+              >
+                {item.label}
+              </a>
+            ))}
+          </nav>
+        </div>
+      )}
 
       {/* ─── Content ─── */}
       <div className="relative z-[1] flex min-h-0 flex-1 flex-col" style={{

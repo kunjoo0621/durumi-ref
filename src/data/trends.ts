@@ -46,6 +46,7 @@ export const trends: WeeklyTrend[] = [
         summary: "npm 배포 시 소스맵 파일이 포함되어 512,000줄 TypeScript 전체가 노출됐습니다. 내부 자율 모드(KAIROS), 3레이어 메모리 아키텍처 등 미공개 기능이 드러났어요.",
         action: "Claude Code 사용자라면 v2.1.87로 롤백하세요. 유출된 아키텍처를 참고해 자신의 워크플로우를 개선할 수 있어요.",
         category: "trend",
+        ogImage: "https://regmedia.co.uk/2026/03/31/shutterstock_2192683369.jpg",
         sources: [
           { name: "VentureBeat", url: "https://venturebeat.com/technology/claude-codes-source-code-appears-to-have-leaked-heres-what-we-know" },
           { name: "The Register", url: "https://www.theregister.com/2026/03/31/anthropic_claude_code_source_code/" },
@@ -56,6 +57,7 @@ export const trends: WeeklyTrend[] = [
         summary: "베타를 졸업하고 정식 출시. AI 디자인 생성, 이미지 편집, 코드 export 기능을 제공하지만 3/18부터 크레딧 과금이 시작됐어요.",
         action: "크레딧 소비량을 파악하고, 어디에 집중 투입할지 미리 정하세요. Pro 플랜은 5월부터 적용.",
         category: "tool",
+        ogImage: "https://cdn.sanity.io/images/599r6htc/regionalized/bbbd715863ae9596492a6b6eda14af49a9b802de-2400x1260.png?w=1200&q=70&fit=max&auto=format",
         sources: [
           { name: "Figma Blog", url: "https://www.figma.com/blog/updates-to-ai-credits-in-figma/" },
         ],
@@ -65,6 +67,7 @@ export const trends: WeeklyTrend[] = [
         summary: "이미지 30장 미만으로 Firefly에 자신만의 스타일을 학습시킬 수 있습니다. 선 두께, 조명, 색상 팔레트까지 유지해요.",
         action: "CC 구독자라면 바로 써보세요. 브랜드 일러스트 일관성 유지에 강력합니다.",
         category: "tool",
+        ogImage: "https://blog.adobe.com/en/publish/2026/03/19/media_13006d926799bc866df08ba9c17cd4c7358bc273a.jpg?width=1200&format=pjpg&optimize=medium",
         sources: [
           { name: "Adobe Blog", url: "https://blog.adobe.com/en/publish/2026/03/19/adobe-firefly-expands-video-image-creation-with-new-ai-capabilities-custom-models" },
           { name: "PetaPixel", url: "https://petapixel.com/2026/03/19/you-can-now-train-adobes-ai-on-your-own-unique-photographic-style/" },
@@ -92,6 +95,7 @@ export const trends: WeeklyTrend[] = [
         summary: "Standard, Thinking, Pro 3가지 버전이 나왔어요. 컨텍스트 105만 토큰, 사실 오류 33% 감소.",
         action: "ChatGPT Plus 사용자라면 자동 적용. 긴 문서 요약이나 리서치에 바로 활용하세요.",
         category: "trend",
+        ogImage: "https://oukdqujzonxvqhiefdsv.supabase.co/storage/v1/object/public/blogs/b0fc0c26-cd58-4791-a362-eebd0a445816.png",
         sources: [
           { name: "BuildFastWithAI", url: "https://www.buildfastwithai.com/blogs/ai-models-march-2026-releases" },
         ],
@@ -101,6 +105,7 @@ export const trends: WeeklyTrend[] = [
         summary: "Anthropic, OpenAI, Google 에이전트를 하나의 플랫폼에서 관리. 정책, 비용, 컨텍스트 공유 기능 제공.",
         action: "Q2 얼리 액세스 신청해두세요. 여러 AI 도구를 쓰고 있다면 관리가 편해집니다.",
         category: "tool",
+        ogImage: "https://blog.jetbrains.com/wp-content/uploads/2026/03/Blog-Social-Share-image-1280x720-1-1.png",
         sources: [
           { name: "JetBrains Blog", url: "https://blog.jetbrains.com/blog/2026/03/24/introducing-jetbrains-central/" },
           { name: "InfoWorld", url: "https://www.infoworld.com/article/4149535/new-jetbrains-platform-manages-ai-coding-agents.html" },
@@ -111,6 +116,7 @@ export const trends: WeeklyTrend[] = [
         summary: "ChatGPT, Gemini, Copilot 앱 안에서 직접 상품 판매 가능. AI 앱이 새로운 판매 채널이 되는 시대.",
         action: "이커머스 UI를 디자인한다면, AI 앱 내 쇼핑 경험 설계를 고려해야 합니다.",
         category: "trend",
+        ogImage: "https://storage.ghost.io/c/40/b2/40b20fac-3092-4d7d-92de-227ddbaff057/content/images/size/w1200/2026/03/March-26th-hero-n-fr.png",
         sources: [
           { name: "The AI Marketers", url: "https://www.theaimarketers.ai/news032626/" },
         ],

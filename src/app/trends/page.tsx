@@ -23,6 +23,22 @@ function TrendItemCard({ item, index, total }: { item: TrendItem; index: number;
         animationDelay: `${index * 80}ms`,
       }}
     >
+      {/* OG Image */}
+      {item.ogImage && (
+        <div style={{
+          marginBottom: 16, borderRadius: 12, overflow: "hidden",
+          aspectRatio: "2/1", position: "relative", background: "var(--color-gray-6)",
+        }}>
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img
+            src={item.ogImage}
+            alt={item.title}
+            loading="lazy"
+            style={{ width: "100%", height: "100%", objectFit: "cover" }}
+          />
+        </div>
+      )}
+
       {/* Category */}
       <div className="mb-3 flex items-center gap-2">
         <div style={{ width: 6, height: 6, borderRadius: "50%", background: color }} />
@@ -96,14 +112,6 @@ function WeekSection({ week, isLatest }: { week: typeof trends[0]; isLatest: boo
       border: "1px solid var(--glass-border)",
       overflow: "hidden",
     }}>
-      {/* Color accent bar at top */}
-      {isLatest && (
-        <div style={{
-          height: 3,
-          background: "linear-gradient(90deg, #0A84FF, #5E5CE6, #BF5AF2)",
-        }} />
-      )}
-
       {/* Header */}
       <button
         onClick={() => setExpanded(!expanded)}
@@ -135,7 +143,7 @@ function WeekSection({ week, isLatest }: { week: typeof trends[0]; isLatest: boo
             )}
           </div>
           <h2 style={{
-            fontSize: isLatest ? 20 : 17,
+            fontSize: 17,
             fontWeight: 700,
             color: "var(--color-label)",
             margin: 0, letterSpacing: -0.3, lineHeight: 1.45,

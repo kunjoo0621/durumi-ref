@@ -90,6 +90,7 @@ export default function RootLayout({
     <html lang="ko" className={`${montserrat.variable} ${pretendard.variable} h-full antialiased`}>
       <head>
         <meta name="naver-site-verification" content="d791f75c9b5ce0ba19cc8217b44beefee114f188" />
+        <meta name="google-adsense-account" content="ca-pub-6839121940253595" />
         {/* JSON-LD 구조화 데이터 */}
         <script
           type="application/ld+json"

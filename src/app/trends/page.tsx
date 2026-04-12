@@ -2,19 +2,19 @@
 
 import { useState } from "react";
 import { trends, CATEGORY_LABELS, CATEGORY_COLORS, type TrendItem } from "@/data/trends";
-import { ArrowUpRight, CaretDown, List, X } from "@phosphor-icons/react";
+import { CaretDown, List, X } from "@phosphor-icons/react";
 import CustomCursor from "@/components/CustomCursor";
 import SubmitModal from "@/components/SubmitModal";
 
 /* ─── Trend Item ─── */
-function TrendItem({ item, index, total }: { item: TrendItem; index: number; total: number }) {
+function TrendItemCard({ item, index, total }: { item: TrendItem; index: number; total: number }) {
   const color = CATEGORY_COLORS[item.category];
   const label = CATEGORY_LABELS[item.category];
   const isLast = index === total - 1;
 
   return (
     <div
-      className="trend-card flex gap-5"
+      className="trend-card"
       style={{
         paddingBottom: isLast ? 0 : 28,
         marginBottom: isLast ? 0 : 28,
@@ -23,78 +23,62 @@ function TrendItem({ item, index, total }: { item: TrendItem; index: number; tot
         animationDelay: `${index * 80}ms`,
       }}
     >
-      {/* Left: accent line + number */}
-      <div className="flex flex-col items-center" style={{ minWidth: 32 }}>
-        <span style={{
-          fontSize: 11,
-          fontWeight: 800,
-          color: color,
-          letterSpacing: 0.5,
-          marginBottom: 8,
-        }}>
-          {String(index + 1).padStart(2, "0")}
+      {/* Category */}
+      <div className="mb-3 flex items-center gap-2">
+        <div style={{ width: 6, height: 6, borderRadius: "50%", background: color }} />
+        <span style={{ fontSize: 11, fontWeight: 600, color: color, letterSpacing: 0.3 }}>
+          {label}
         </span>
-        <div style={{
-          width: 2,
-          flex: 1,
-          background: `linear-gradient(to bottom, ${color}40, transparent)`,
-          borderRadius: 1,
-        }} />
       </div>
 
-      {/* Right: content */}
-      <div style={{ flex: 1, minWidth: 0 }}>
-        {/* Category + link */}
-        <div className="mb-3 flex items-center gap-2">
-          <span style={{
-            fontSize: 11, fontWeight: 600, color: color,
-            letterSpacing: 0.3,
-          }}>
-            {label}
-          </span>
-          {item.link && (
-            <a
-              href={item.link}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="header-btn flex items-center gap-1"
-              style={{
-                fontSize: 11, color: "var(--color-label-3)",
-                textDecoration: "none", padding: "2px 6px", borderRadius: 6,
-              }}
-            >
-              <ArrowUpRight size={10} weight="bold" />
-            </a>
-          )}
+      {/* Title */}
+      <h3 style={{
+        fontSize: 17, fontWeight: 700,
+        color: "var(--color-label)",
+        lineHeight: 1.5, marginBottom: 10, letterSpacing: -0.2,
+      }}>
+        {item.title}
+      </h3>
+
+      {/* Summary */}
+      <p style={{
+        fontSize: 14, color: "var(--color-label-2)",
+        lineHeight: 1.8, marginBottom: 0, wordBreak: "keep-all",
+      }}>
+        {item.summary}
+      </p>
+
+      {/* Action */}
+      <p style={{
+        fontSize: 13, color: color,
+        lineHeight: 1.7, marginTop: 12, marginBottom: 0, fontWeight: 500,
+      }}>
+        → {item.action}
+      </p>
+
+      {/* Sources */}
+      {item.sources.length > 0 && (
+        <div style={{ marginTop: 14, display: "flex", alignItems: "center", gap: 4, flexWrap: "wrap" }}>
+          <span style={{ fontSize: 11, color: "var(--color-label-3)" }}>출처</span>
+          {item.sources.map((s, i) => (
+            <span key={s.url} className="flex items-center">
+              {i > 0 && <span style={{ fontSize: 11, color: "var(--color-gray-3)", margin: "0 2px" }}>·</span>}
+              <a
+                href={s.url}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="header-btn"
+                style={{
+                  fontSize: 11, color: "var(--color-label-3)",
+                  textDecoration: "none", padding: "2px 4px", borderRadius: 4,
+                }}
+              >
+                {s.name}
+              </a>
+            </span>
+          ))}
         </div>
-
-        {/* Title */}
-        <h3 style={{
-          fontSize: 17, fontWeight: 700,
-          color: "var(--color-label)",
-          lineHeight: 1.5, marginBottom: 10, letterSpacing: -0.2,
-        }}>
-          {item.title}
-        </h3>
-
-        {/* Summary */}
-        <p style={{
-          fontSize: 14, color: "var(--color-label-2)",
-          lineHeight: 1.8, marginBottom: 0,
-          wordBreak: "keep-all",
-        }}>
-          {item.summary}
-        </p>
-
-        {/* Action — inline, not boxed */}
-        <p style={{
-          fontSize: 13, color: color,
-          lineHeight: 1.7, marginTop: 12, marginBottom: 0,
-          fontWeight: 500,
-        }}>
-          → {item.action}
-        </p>
-      </div>
+      )}
     </div>
   );
 }
@@ -182,7 +166,7 @@ function WeekSection({ week, isLatest }: { week: typeof trends[0]; isLatest: boo
         <div style={{ padding: "0 28px 28px" }}>
           <div style={{ height: 1, background: "var(--glass-border)", marginBottom: 28 }} />
           {week.items.map((item, i) => (
-            <TrendItem key={item.title} item={item} index={i} total={week.items.length} />
+            <TrendItemCard key={item.title} item={item} index={i} total={week.items.length} />
           ))}
         </div>
       )}

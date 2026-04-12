@@ -13,20 +13,22 @@ function TrendItemCard({ item, index, total }: { item: TrendItem; index: number;
   const isLast = index === total - 1;
 
   return (
-    <div
-      className="trend-card"
+    <a
+      href={item.sources.length > 0 ? item.sources[0].url : "#"}
+      target="_blank"
+      rel="noopener noreferrer"
+      className="trend-card block"
       style={{
         paddingBottom: isLast ? 0 : 28,
         marginBottom: isLast ? 0 : 28,
         borderBottom: isLast ? "none" : "1px solid var(--glass-border)",
         animation: "fade-up 0.4s cubic-bezier(.16,1,.3,1) backwards",
         animationDelay: `${index * 80}ms`,
+        textDecoration: "none", color: "inherit",
       }}
     >
       <div className="flex gap-4">
-        {/* Left: text */}
         <div style={{ flex: 1, minWidth: 0 }}>
-          {/* Category */}
           <div className="mb-3 flex items-center gap-2">
             <div style={{ width: 6, height: 6, borderRadius: "50%", background: color }} />
             <span style={{ fontSize: 11, fontWeight: 600, color: color, letterSpacing: 0.3 }}>
@@ -34,33 +36,14 @@ function TrendItemCard({ item, index, total }: { item: TrendItem; index: number;
             </span>
           </div>
 
-          {/* Title */}
-          {item.sources.length > 0 ? (
-            <a
-              href={item.sources[0].url}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="header-btn"
-              style={{
-                fontSize: 17, fontWeight: 700,
-                color: "var(--color-label)",
-                lineHeight: 1.5, marginBottom: 10, letterSpacing: -0.2,
-                textDecoration: "none", display: "block",
-              }}
-            >
-              {item.title}
-            </a>
-          ) : (
-            <h3 style={{
-              fontSize: 17, fontWeight: 700,
-              color: "var(--color-label)",
-              lineHeight: 1.5, marginBottom: 10, letterSpacing: -0.2,
-            }}>
-              {item.title}
-            </h3>
-          )}
+          <h3 style={{
+            fontSize: 17, fontWeight: 700,
+            color: "var(--color-label)",
+            lineHeight: 1.5, marginBottom: 10, letterSpacing: -0.2,
+          }}>
+            {item.title}
+          </h3>
 
-          {/* Summary */}
           <p style={{
             fontSize: 14, color: "var(--color-label-2)",
             lineHeight: 1.8, marginBottom: 0, wordBreak: "keep-all",
@@ -69,19 +52,11 @@ function TrendItemCard({ item, index, total }: { item: TrendItem; index: number;
           </p>
         </div>
 
-        {/* Right: OG Image (links to source) */}
-        {item.ogImage && item.sources.length > 0 && (
-          <a
-            href={item.sources[0].url}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="header-btn hidden shrink-0 sm:block"
-            style={{
-              width: 160, height: 100, borderRadius: 10, overflow: "hidden",
-              background: "var(--color-gray-6)", marginTop: 24,
-              display: undefined,
-            }}
-          >
+        {item.ogImage && (
+          <div className="hidden shrink-0 sm:block" style={{
+            width: 160, height: 100, borderRadius: 10, overflow: "hidden",
+            background: "var(--color-gray-6)", marginTop: 24,
+          }}>
             {/* eslint-disable-next-line @next/next/no-img-element */}
             <img
               src={item.ogImage}
@@ -89,11 +64,10 @@ function TrendItemCard({ item, index, total }: { item: TrendItem; index: number;
               loading="lazy"
               style={{ width: "100%", height: "100%", objectFit: "cover" }}
             />
-          </a>
+          </div>
         )}
       </div>
 
-      {/* Action */}
       <p style={{
         fontSize: 13, color: color,
         lineHeight: 1.7, marginTop: 12, marginBottom: 0, fontWeight: 500,
@@ -101,30 +75,20 @@ function TrendItemCard({ item, index, total }: { item: TrendItem; index: number;
         → {item.action}
       </p>
 
-      {/* Sources */}
       {item.sources.length > 0 && (
         <div style={{ marginTop: 14, display: "flex", alignItems: "center", gap: 4, flexWrap: "wrap" }}>
           <span style={{ fontSize: 11, color: "var(--color-label-3)" }}>출처</span>
           {item.sources.map((s, i) => (
             <span key={s.url} className="flex items-center">
               {i > 0 && <span style={{ fontSize: 11, color: "var(--color-gray-3)", margin: "0 2px" }}>·</span>}
-              <a
-                href={s.url}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="header-btn"
-                style={{
-                  fontSize: 11, color: "var(--color-label-3)",
-                  textDecoration: "none", padding: "2px 4px", borderRadius: 4,
-                }}
-              >
+              <span style={{ fontSize: 11, color: "var(--color-label-3)", padding: "2px 4px" }}>
                 {s.name}
-              </a>
+              </span>
             </span>
           ))}
         </div>
       )}
-    </div>
+    </a>
   );
 }
 

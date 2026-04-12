@@ -35,13 +35,30 @@ function TrendItemCard({ item, index, total }: { item: TrendItem; index: number;
           </div>
 
           {/* Title */}
-          <h3 style={{
-            fontSize: 17, fontWeight: 700,
-            color: "var(--color-label)",
-            lineHeight: 1.5, marginBottom: 10, letterSpacing: -0.2,
-          }}>
-            {item.title}
-          </h3>
+          {item.sources.length > 0 ? (
+            <a
+              href={item.sources[0].url}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="header-btn"
+              style={{
+                fontSize: 17, fontWeight: 700,
+                color: "var(--color-label)",
+                lineHeight: 1.5, marginBottom: 10, letterSpacing: -0.2,
+                textDecoration: "none", display: "block",
+              }}
+            >
+              {item.title}
+            </a>
+          ) : (
+            <h3 style={{
+              fontSize: 17, fontWeight: 700,
+              color: "var(--color-label)",
+              lineHeight: 1.5, marginBottom: 10, letterSpacing: -0.2,
+            }}>
+              {item.title}
+            </h3>
+          )}
 
           {/* Summary */}
           <p style={{
@@ -52,12 +69,19 @@ function TrendItemCard({ item, index, total }: { item: TrendItem; index: number;
           </p>
         </div>
 
-        {/* Right: OG Image */}
-        {item.ogImage && (
-          <div className="hidden shrink-0 sm:block" style={{
-            width: 160, height: 100, borderRadius: 10, overflow: "hidden",
-            background: "var(--color-gray-6)", marginTop: 24,
-          }}>
+        {/* Right: OG Image (links to source) */}
+        {item.ogImage && item.sources.length > 0 && (
+          <a
+            href={item.sources[0].url}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="header-btn hidden shrink-0 sm:block"
+            style={{
+              width: 160, height: 100, borderRadius: 10, overflow: "hidden",
+              background: "var(--color-gray-6)", marginTop: 24,
+              display: undefined,
+            }}
+          >
             {/* eslint-disable-next-line @next/next/no-img-element */}
             <img
               src={item.ogImage}
@@ -65,7 +89,7 @@ function TrendItemCard({ item, index, total }: { item: TrendItem; index: number;
               loading="lazy"
               style={{ width: "100%", height: "100%", objectFit: "cover" }}
             />
-          </div>
+          </a>
         )}
       </div>
 

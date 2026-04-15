@@ -1,11 +1,10 @@
-import { chromium, devices } from "playwright";
+import { chromium } from "playwright";
 import { categories } from "../src/data/categories";
 import * as fs from "fs";
 import * as path from "path";
 
 const OUTPUT_DIR = path.join(__dirname, "../public/thumbnails");
-const device = devices["iPhone 14 Pro"];
-const MAX_HEIGHT = 3000; // cap fullPage height
+const VIEWPORT = { width: 1280, height: 1600 };
 
 async function capture() {
   fs.mkdirSync(OUTPUT_DIR, { recursive: true });
@@ -19,7 +18,12 @@ async function capture() {
 
   const existing = force
     ? new Set<string>()
-    : new Set(fs.readdirSync(OUTPUT_DIR).filter((f) => f.endsWith(".jpg")).map((f) => f.replace(".jpg", "")));
+    : new Set(
+        fs
+          .readdirSync(OUTPUT_DIR)
+          .filter((f) => f.endsWith("_desktop.jpg"))
+          .map((f) => f.replace("_desktop.jpg", ""))
+      );
 
   const toCapture = allSites.filter(
     (site) => !existing.has(site.url.replace(/[/:]/g, "_"))
@@ -34,13 +38,16 @@ async function capture() {
 
   const browser = await chromium.launch({ headless: true });
   const context = await browser.newContext({
-    ...device,
+    viewport: VIEWPORT,
     deviceScaleFactor: 2,
     locale: "ko-KR",
+    userAgent:
+      "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/126.0.0.0 Safari/537.36",
   });
 
   for (const site of toCapture) {
-    const filename = site.url.replace(/[/:]/g, "_") + ".jpg";
+    const slug = site.url.replace(/[/:]/g, "_");
+    const filename = `${slug}_desktop.jpg`;
     const filepath = path.join(OUTPUT_DIR, filename);
     const url = `https://${site.url}`;
 
@@ -75,33 +82,14 @@ async function capture() {
         // ignore
       }
 
-      // Try fullPage first, fallback to clip
-      try {
-        await page.screenshot({
-          path: filepath,
-          type: "jpeg",
-          quality: 80,
-          fullPage: true,
-        });
-
-        // If fullPage is too tall, re-capture with clip
-        const stat = fs.statSync(filepath);
-        if (stat.size > 3_000_000) {
-          await page.screenshot({
-            path: filepath,
-            type: "jpeg",
-            quality: 75,
-            clip: { x: 0, y: 0, width: device.viewport.width, height: MAX_HEIGHT },
-          });
-        }
-      } catch {
-        await page.screenshot({
-          path: filepath,
-          type: "jpeg",
-          quality: 80,
-          clip: { x: 0, y: 0, width: device.viewport.width, height: MAX_HEIGHT },
-        });
-      }
+      // Desktop 1280x1600 clip — memory feedback_thumbnail_type.md
+      await page.screenshot({
+        path: filepath,
+        type: "jpeg",
+        quality: 82,
+        clip: { x: 0, y: 0, width: VIEWPORT.width, height: VIEWPORT.height },
+        timeout: 60000,
+      });
 
       // Verify file is valid (not empty, not too small)
       const stat = fs.statSync(filepath);

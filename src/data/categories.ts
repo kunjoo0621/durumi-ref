@@ -28,6 +28,7 @@ export const COLORS = {
   teal: "#64D2FF",
   yellow: "#FFD60A",
   mint: "#63E6E2",
+  red: "#FF453A",
 } as const;
 
 export const categories: Category[] = [
@@ -170,6 +171,25 @@ export const categories: Category[] = [
       { name: "Mindsparkle Mag", url: "mindsparklemag.com", desc: "프리미엄 디자인 매거진", tags: ["매거진", "프리미엄"] },
       { name: "Framer Gallery", url: "framer.com/gallery", desc: "요즘 감성 웹사이트 레퍼런스", tags: ["웹", "Framer"], addedAt: "2026-04-04" },
       { name: "Curated Supply", url: "curated.supply", desc: "고급스러운 제품 디자인 사례", tags: ["제품", "큐레이션"], addedAt: "2026-04-04" },
+    ],
+  },
+  {
+    id: "dataviz",
+    label: "Data Viz",
+    shortLabel: "차트",
+    color: COLORS.red,
+    sites: [
+      { name: "Xenographics", url: "xeno.graphics", desc: "처음 보는 실험적·비정형 차트 유형 갤러리", tags: ["실험", "특이"], addedAt: "2026-04-15" },
+      { name: "AntV", url: "antv.antgroup.com/en", desc: "알리바바의 차트 라이브러리 허브 (G2, G6, L7, S2) — 아시아 이디엄", tags: ["아시아", "라이브러리"], addedAt: "2026-04-15" },
+      { name: "FT Visual Vocabulary", url: "github.com/Financial-Times/chart-doctor", desc: "FT 뉴스룸의 차트 타입 분류 포스터", tags: ["분류", "뉴스"], addedAt: "2026-04-15" },
+      { name: "RAWGraphs", url: "rawgraphs.io", desc: "오픈소스 차트 생성 툴 + 갤러리", tags: ["오픈소스", "툴"], addedAt: "2026-04-15" },
+      { name: "Truth & Beauty", url: "truth-and-beauty.net", desc: "Moritz Stefaner 포트폴리오 — 프로젝트마다 새 차트 발명", tags: ["포트폴리오", "발명"], addedAt: "2026-04-15" },
+      { name: "Visual Cinnamon", url: "visualcinnamon.com", desc: "Nadieh Bremer 포트폴리오 — 방사형·나선 실험", tags: ["포트폴리오", "방사형"], addedAt: "2026-04-15" },
+      { name: "Giorgia Lupi", url: "giorgialupi.com", desc: "Pentagram 파트너 — 데이터 휴머니즘", tags: ["포트폴리오", "휴머니즘"], addedAt: "2026-04-15" },
+      { name: "Accurat", url: "accurat.it", desc: "이탈리아 에디토리얼 데이터 스튜디오 (Fragapane)", tags: ["스튜디오", "에디토리얼"], addedAt: "2026-04-15" },
+      { name: "Milestones in Data Viz", url: "datavis.ca/milestones", desc: "차트 발명사 — Michael Friendly 학술 아카이브", tags: ["역사", "학술"], addedAt: "2026-04-15" },
+      { name: "Nightingale DVS", url: "nightingaledvs.com", desc: "데이터 시각화 학회 공식 매거진", tags: ["매거진", "에세이"], addedAt: "2026-04-15" },
+      { name: "DataPhys", url: "dataphys.org/list", desc: "물리적 데이터 아티팩트 430+ 아카이브", tags: ["물리", "아카이브"], addedAt: "2026-04-15" },
     ],
   },
 ];

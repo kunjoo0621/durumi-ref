@@ -18,7 +18,7 @@ const pretendard = localFont({
 
 const SITE_URL = "https://durumiref.com";
 const TITLE = "Durumi Ref — 디자이너를 위한 레퍼런스 사이트 큐레이션";
-const DESCRIPTION = "UI/UX, 디자인 시스템, 에셋, 아이콘, 타이포그래피, 영감까지. 디자이너가 자주 보는 레퍼런스 사이트를 한곳에서 탐색하세요.";
+const DESCRIPTION = "UI/UX, 디자인 시스템, 에셋, 아이콘, 타이포그래피, 데이터 시각화, 영감까지. 디자이너가 자주 보는 레퍼런스 사이트를 한곳에서 탐색하세요.";
 
 export const metadata: Metadata = {
   metadataBase: new URL(SITE_URL),
@@ -34,6 +34,7 @@ export const metadata: Metadata = {
     "웹 디자인 레퍼런스 모음", "앱 디자인 참고", "UI 패턴", "UX 리서치",
     "디자인 트렌드", "디자인 영감 사이트", "디자인 도구 모음",
     "AI 디자인 도구", "디자인 포트폴리오", "타이포그래피 참고",
+    "데이터 시각화", "차트 디자인", "데이터 시각화 레퍼런스", "data visualization",
     "Dribbble", "Behance", "Mobbin", "Figma", "Awwwards",
     "design reference", "design inspiration", "UI design", "web design gallery",
     "두루미", "두루미 레퍼런스", "Durumi Ref", "durumiref",

@@ -12,6 +12,7 @@ import {
   Megaphone,
   Brain,
   Package,
+  ChartLine,
   Plus,
   Rows,
   GridFour,
@@ -41,6 +42,7 @@ const CATEGORY_ICONS: Record<string, ComponentType<{ size?: number; weight?: "re
   icon: Star,
   typo: TextAa,
   inspiration: Lightbulb,
+  dataviz: ChartLine,
   favorites: Heart,
 };
 

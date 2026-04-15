@@ -67,17 +67,6 @@ export const categories: Category[] = [
     ],
   },
   {
-    id: "collateral",
-    label: "Collateral",
-    shortLabel: "산출물",
-    color: COLORS.yellow,
-    sites: [
-      { name: "Really Good Emails", url: "reallygoodemails.com", desc: "카테고리별 이메일 디자인 갤러리", tags: ["이메일", "갤러리"] },
-      { name: "SaaS Email", url: "saasemailtemplates.io", desc: "SaaS 이메일 템플릿 모음", tags: ["이메일", "SaaS"] },
-      { name: "Email Love", url: "emaillove.com", desc: "아름다운 이메일 디자인 큐레이션", tags: ["이메일", "큐레이션"] },
-    ],
-  },
-  {
     id: "ai",
     label: "AI",
     shortLabel: "AI",
@@ -86,14 +75,11 @@ export const categories: Category[] = [
       { name: "ChatGPT", url: "chatgpt.com", desc: "OpenAI의 대화형 AI", tags: ["대화", "OpenAI"], addedAt: "2026-04-01" },
       { name: "Claude", url: "claude.ai", desc: "Anthropic의 AI 어시스턴트", tags: ["대화", "Anthropic"], addedAt: "2026-04-01" },
       { name: "Midjourney", url: "midjourney.com", desc: "AI 이미지 생성 도구", tags: ["이미지", "생성"], addedAt: "2026-04-01", logoOnly: true },
-      { name: "Galileo AI", url: "galileo.ai", desc: "AI 기반 UI 디자인 생성", tags: ["UI", "디자인"], addedAt: "2026-04-01" },
       { name: "v0", url: "v0.dev", desc: "AI 기반 UI 코드 생성", tags: ["UI", "코드"], addedAt: "2026-04-01" },
       { name: "Cursor", url: "cursor.com", desc: "AI 코딩 에디터", tags: ["코딩", "에디터"], addedAt: "2026-04-01" },
       { name: "Perplexity", url: "perplexity.ai", desc: "AI 검색 엔진", tags: ["검색", "리서치"], addedAt: "2026-04-01" },
       { name: "Runway", url: "runwayml.com", desc: "AI 영상·이미지 생성", tags: ["영상", "생성"], addedAt: "2026-04-01" },
-      { name: "There's An AI For That", url: "theresanaiforthat.com", desc: "AI 도구 검색 디렉토리", tags: ["디렉토리", "검색"], addedAt: "2026-04-01" },
       { name: "Lilys AI", url: "lilys.ai/ko", desc: "AI 영상·문서 요약 서비스", tags: ["요약", "생산성"], addedAt: "2026-04-01" },
-      { name: "Future Tools", url: "futuretools.io", desc: "AI 도구 큐레이션", tags: ["큐레이션", "트렌드"], addedAt: "2026-04-01" },
     ],
   },
   {

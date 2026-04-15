@@ -9,7 +9,6 @@ import {
   Star,
   TextAa,
   Lightbulb,
-  Megaphone,
   Brain,
   Package,
   ChartLine,
@@ -35,7 +34,6 @@ import SubmitModal from "./SubmitModal";
 const CATEGORY_ICONS: Record<string, ComponentType<{ size?: number; weight?: "regular" | "fill" | "bold" }>> = {
   uiux: Layout,
   system: SquaresFour,
-  collateral: Megaphone,
   ai: Brain,
   asset: Diamond,
   mockup: Package,

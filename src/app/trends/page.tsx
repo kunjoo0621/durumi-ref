@@ -235,7 +235,6 @@ export default function TrendsPage() {
             {[
               { label: "Ref", href: "/", active: false },
               { label: "Trends", href: "/trends", active: true },
-              { label: "Extract", href: "/extract", active: false },
             ].map((item) => (
               <a key={item.label} href={item.href} className="header-btn" style={{
                 padding: "6px 16px", borderRadius: 999, fontSize: 13,
@@ -276,7 +275,6 @@ export default function TrendsPage() {
             {[
               { label: "Ref", href: "/", active: false },
               { label: "Trends", href: "/trends", active: true },
-              { label: "Extract", href: "/extract", active: false },
             ].map((item, i) => (
               <a key={item.label} href={item.href} className="mobile-nav-link" style={{
                 fontSize: 24, fontWeight: item.active ? 700 : 500,

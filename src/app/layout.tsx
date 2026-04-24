@@ -1,8 +1,8 @@
 import type { Metadata, Viewport } from "next";
 import { Montserrat } from "next/font/google";
 import localFont from "next/font/local";
-import Script from "next/script";
 import "./globals.css";
+import AdsenseScript from "@/components/AdsenseScript";
 
 const montserrat = Montserrat({
   variable: "--font-montserrat",
@@ -113,12 +113,7 @@ export default function RootLayout({
       </head>
       <body className="h-full overflow-hidden">
         {children}
-        <Script
-          async
-          src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-6839121940253595"
-          crossOrigin="anonymous"
-          strategy="afterInteractive"
-        />
+        <AdsenseScript />
       </body>
     </html>
   );

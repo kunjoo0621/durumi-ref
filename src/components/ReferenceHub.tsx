@@ -676,7 +676,6 @@ export default function ReferenceHub() {
             {[
               { label: "Ref", href: "/", active: true },
               { label: "Trends", href: "/trends", active: false },
-              { label: "Extract", href: "/extract", active: false },
             ].map((item) => (
               <a
                 key={item.label}
@@ -813,7 +812,6 @@ export default function ReferenceHub() {
             {[
               { label: "Ref", href: "/", active: true },
               { label: "Trends", href: "/trends", active: false },
-              { label: "Extract", href: "/extract", active: false },
             ].map((item, i) => (
               <a
                 key={item.label}
